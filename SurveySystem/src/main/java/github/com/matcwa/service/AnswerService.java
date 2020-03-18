@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Optional;
 
 @Service
 public class AnswerService {
@@ -74,7 +73,7 @@ public class AnswerService {
     private ErrorHandling<AnswerDto, AnswerError> validateVote(String ipAddress, Long id) {
         ErrorHandling<AnswerDto, AnswerError> addVote = new ErrorHandling<>();
         answerRepository.findById(id).ifPresentOrElse(answer -> {;
-        if (answer.getIpList().contains(ipAddress)) {
+        if (answer.getIpSet().contains(ipAddress)) {
             addVote.setError(AnswerError.ONE_VOTE_PER_IP_ERROR);
         } else {
             addVote.setDto(AnswerMapper.toDto(answer));

@@ -1,9 +1,7 @@
 package github.com.matcwa.model;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -18,7 +16,7 @@ public class Answer {
     @ManyToOne(fetch = FetchType.LAZY)
     private Question question;
     @ElementCollection(fetch = FetchType.LAZY)
-    private Set<String> ipList=new HashSet<>();
+    private Set<String> ipSet =new HashSet<>();
 
 
     public Answer() {
@@ -32,7 +30,7 @@ public class Answer {
 
     public void addVote(Vote vote,String ipAddress){
         votes.add(vote);
-        ipList.add(ipAddress);
+        ipSet.add(ipAddress);
     }
     public Long getId() {
         return id;
@@ -66,11 +64,11 @@ public class Answer {
         this.question = question;
     }
 
-    public Set<String> getIpList() {
-        return ipList;
+    public Set<String> getIpSet() {
+        return ipSet;
     }
 
-    public void setIpList(Set<String> ipList) {
-        this.ipList = ipList;
+    public void setIpSet(Set<String> ipSet) {
+        this.ipSet = ipSet;
     }
 }
