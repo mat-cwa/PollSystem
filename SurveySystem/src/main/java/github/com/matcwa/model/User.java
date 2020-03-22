@@ -10,6 +10,7 @@ public class User {
     private Long id;
     private String username;
     private String password;
+    private Role role;
     @OneToMany(mappedBy = "owner")
     private Set<Poll> pollSet;
     @OneToMany(mappedBy = "owner")

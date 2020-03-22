@@ -14,10 +14,12 @@ import github.com.matcwa.repository.QuestionRepository;
 import github.com.matcwa.repository.VoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 
 @Service
+@Transactional
 public class AnswerService {
     private AnswerRepository answerRepository;
     private QuestionRepository questionRepository;

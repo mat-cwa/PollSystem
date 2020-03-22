@@ -22,8 +22,10 @@ public class PollController {
     @Autowired
     public PollController(PollService pollService) {
         this.pollService = pollService;
-
     }
+
+
+
     @PostMapping("/newPoll")
     public ResponseEntity createNowPoll(@RequestBody NewPollDto newPollDto) {
         ErrorHandling<NewPollDto, PollError> poll = pollService.addNewPoll(newPollDto);
@@ -31,7 +33,7 @@ public class PollController {
     }
 
     @GetMapping("/all")
-    public List<PollDto> getAll(){
+    public List<PollDto> getAll() {
         return pollService.getAll();
     }
 
@@ -44,7 +46,7 @@ public class PollController {
 
 
     @DeleteMapping("poll/{id}")
-    public HttpStatus deletePollById(@PathVariable Long id){
+    public HttpStatus deletePollById(@PathVariable Long id) {
         pollService.deletePoll(id);
         return HttpStatus.OK;
     }

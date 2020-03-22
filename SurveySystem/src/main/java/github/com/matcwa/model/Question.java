@@ -10,7 +10,7 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String questionDescription;
-    @OneToMany(mappedBy = "question",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "question",cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
     private Set<Answer> answers;
     @ManyToOne
     private Poll poll;

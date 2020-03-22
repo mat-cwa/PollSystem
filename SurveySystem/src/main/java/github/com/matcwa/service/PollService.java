@@ -39,7 +39,6 @@ public class PollService {
                 .map(PollMapper::toDto);
     }
 
-
     public ErrorHandling<NewPollDto, PollError> addNewPoll(NewPollDto newPollDto) {
         ErrorHandling<NewPollDto, PollError> pollDto = validatePoll(newPollDto);
         if (pollDto.getDto() != null) {

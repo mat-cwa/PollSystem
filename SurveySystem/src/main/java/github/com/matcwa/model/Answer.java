@@ -11,9 +11,9 @@ public class Answer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String answerDescription;
-    @OneToMany(mappedBy = "answer",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "answer",fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
     private Set<Vote> votes;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Question question;
     @ElementCollection(fetch = FetchType.LAZY)
     private Set<String> ipSet =new HashSet<>();

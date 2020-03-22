@@ -4,16 +4,16 @@ import github.com.matcwa.api.dto.NewQuestionDto;
 import github.com.matcwa.api.error.ErrorHandling;
 import github.com.matcwa.api.error.QuestionError;
 import github.com.matcwa.api.mapper.QuestionMapper;
-import github.com.matcwa.model.Poll;
 import github.com.matcwa.model.Question;
 import github.com.matcwa.repository.PollRepository;
 import github.com.matcwa.repository.QuestionRepository;
-import io.vavr.control.Either;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 @Service
+@Transactional
 public class QuestionService {
     private QuestionRepository questionRepository;
     private PollRepository pollRepository;

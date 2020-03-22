@@ -13,6 +13,14 @@ public class Vote {
     @ManyToOne
     private Answer answer;
 
+    public Vote() {
+    }
+
+    public Vote(Answer answer) {
+        this.answer = answer;
+        date=new Date();
+    }
+
     private Date date = new Date();
 
     public Long getId() {

@@ -1,10 +1,129 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="9dc98d41-e2a1-4afd-a483-7c4452401f74" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/infrastructure/config/WebSecurityConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/model/Role.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__io_vavr_vavr_0_10_2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__io_vavr_vavr_match_0_10_2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SurveySystem.iml" beforeDir="false" afterPath="$PROJECT_DIR$/SurveySystem.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/controller/PollController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/controller/PollController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/model/Answer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/model/Answer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/model/Question.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/model/Question.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/model/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/model/Vote.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/model/Vote.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/repository/DbRunner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/repository/DbRunner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/repository/PollRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/repository/PollRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/service/AnswerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/service/AnswerService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/service/PollService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/service/PollService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/service/QuestionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/service/QuestionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/META-INF/SurveySystem.kotlin_module" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/controller/PollController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/controller/PollController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/model/Answer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/model/Answer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/model/Question.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/model/Question.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/model/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/model/User.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/model/Vote.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/model/Vote.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/repository/DbRunner.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/repository/DbRunner.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/service/AnswerService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/service/AnswerService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/service/PollService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/service/PollService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/service/QuestionService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/service/QuestionService.class" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
+  <component name="MavenImportPreferences">
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="importAutomatically" value="true" />
+      </MavenImportingSettings>
+    </option>
+  </component>
   <component name="ProjectId" id="1ZJoCpDfRcQ5q7FeKQnspdbvO8X" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../pilljackie" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="github.com.matcwa.api.error" />
+      <recent name="github.com.matcwa.api.jwtToken" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration name="SurveySystemApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="github.com.matcwa.SurveySystemApplication" />
+      <module name="SurveySystem" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="github.com.matcwa.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.SurveySystemApplication" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9dc98d41-e2a1-4afd-a483-7c4452401f74" name="Default Changelist" comment="" />
+      <created>1584566432177</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1584566432177</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>
