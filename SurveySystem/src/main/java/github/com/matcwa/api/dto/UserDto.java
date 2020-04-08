@@ -7,6 +7,7 @@ import java.util.Set;
 public class UserDto {
     private Long id;
     private String username;
+    private String token;
     @JsonManagedReference
     private Set<PollDto> pollSet;
     @JsonManagedReference(value = "user-vote")
@@ -52,5 +53,13 @@ public class UserDto {
 
     public void setVotes(Set<VoteDto> votes) {
         this.votes = votes;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

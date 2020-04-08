@@ -1,8 +1,7 @@
 package github.com.matcwa.model;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Answer {
@@ -17,6 +16,8 @@ public class Answer {
     private Question question;
     @ElementCollection(fetch = FetchType.LAZY)
     private Set<String> ipSet =new HashSet<>();
+    @ElementCollection(fetch = FetchType.LAZY)
+    private Map<String, Date> mojampka =new HashMap<>();
 
 
     public Answer() {

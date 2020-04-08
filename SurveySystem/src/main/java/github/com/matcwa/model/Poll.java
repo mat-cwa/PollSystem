@@ -10,7 +10,7 @@ public class Poll {
     private Long id;
     private String name;
     @ManyToOne(cascade = {CascadeType.REMOVE,CascadeType.PERSIST})
-    private User owner=new User("login123"); // TODO: add owner
+    private User owner=new User("login123","haslo"); // TODO: add owner
     @OneToMany(cascade = {CascadeType.REMOVE,CascadeType.PERSIST}, mappedBy = "poll")
     private Set<Question> questions;
 

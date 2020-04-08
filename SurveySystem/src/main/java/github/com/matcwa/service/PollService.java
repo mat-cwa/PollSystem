@@ -39,6 +39,7 @@ public class PollService {
                 .map(PollMapper::toDto);
     }
 
+    @Transactional
     public ErrorHandling<NewPollDto, PollError> addNewPoll(NewPollDto newPollDto) {
         ErrorHandling<NewPollDto, PollError> pollDto = validatePoll(newPollDto);
         if (pollDto.getDto() != null) {
@@ -56,7 +57,7 @@ public class PollService {
 
     private ErrorHandling<NewPollDto, PollError> validatePoll(NewPollDto newPollDto) {
         ErrorHandling<NewPollDto, PollError> poll = new ErrorHandling<>();
-        if (newPollDto.getName().isEmpty() || newPollDto.getName() == null) {
+        if (newPollDto.getName() == null || newPollDto.getName().isEmpty() ) {
             poll.setError(PollError.WRONG_NAME_ERROR);
         } else {
             poll.setDto(newPollDto);

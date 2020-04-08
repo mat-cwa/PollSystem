@@ -1,13 +1,13 @@
-package github.com.matcwa.api.jwtToken;
+package github.com.matcwa.api.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import javax.servlet.*;
@@ -19,7 +19,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class JwtFilter extends BasicAuthenticationFilter {
-    private String secret = UUID.randomUUID().toString();
+
     public JwtFilter(AuthenticationManager authenticationManager) {
         super(authenticationManager);
     }
@@ -33,14 +33,15 @@ public class JwtFilter extends BasicAuthenticationFilter {
     }
 
     private UsernamePasswordAuthenticationToken getAuthenticationByToken(String header) {
-        Jws<Claims> claims = Jwts.parser().setSigningKey("secret".getBytes())
-                .parseClaimsJws(header.replace("Bearer", ""));
+        String secret = "T9>~_f1=msb8ues%&z)EfcBv=}@A(`";
+        Jws<Claims> claims = Jwts.parser().setSigningKey(secret.getBytes())
+                .parseClaimsJws(header.replace("Bearer ", ""));
 
-        String username = claims.getBody().get("username").toString();
-        String password = claims.getBody().get("password").toString();
+//        String username = claims.getBody().get("username").toString();
+//        String password = claims.getBody().get("password").toString();
         String role  = claims.getBody().get("role").toString();
         Set<SimpleGrantedAuthority> simpleGrantedAuthorities = Collections.singleton(new SimpleGrantedAuthority(role));
-        return new UsernamePasswordAuthenticationToken(username, password, simpleGrantedAuthorities);
+        return new UsernamePasswordAuthenticationToken(null, null, simpleGrantedAuthorities);
 
     }
 

@@ -19,8 +19,9 @@ public class User {
     public User() {
     }
 
-    public User(String username) {
+    public User(String username,String password) {
         this.username = username;
+        this.password=password;
     }
 
     public Long getId() {
@@ -54,5 +55,21 @@ public class User {
 
     public void setVotes(Set<Vote> votes) {
         this.votes = votes;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }
