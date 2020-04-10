@@ -3,6 +3,7 @@ package github.com.matcwa.controller;
 import github.com.matcwa.api.dto.AnswerDto;
 import github.com.matcwa.api.dto.NewAnswerDto;
 import github.com.matcwa.api.dto.NewVoteDto;
+import github.com.matcwa.api.dto.QuestionDto;
 import github.com.matcwa.api.error.AnswerError;
 import github.com.matcwa.api.error.ErrorHandling;
 import github.com.matcwa.infrastructure.ResponseResolver;
@@ -26,8 +27,14 @@ public class AnswerController {
 
     @PostMapping("/question/{questionId}/newAnswer")
     public ResponseEntity createNewAnswer(@RequestBody NewAnswerDto newAnswerDto, @PathVariable Long questionId){
-        ErrorHandling<NewAnswerDto, AnswerError> newAnswer = answerService.createNewAnswer(newAnswerDto, questionId);
+        ErrorHandling<QuestionDto, AnswerError> newAnswer = answerService.createNewAnswer(newAnswerDto, questionId);
         return ResponseResolver.resolve(newAnswer);
+    }
+
+    @PutMapping("answer/update/{id}")
+    public ResponseEntity updateAnswer(@RequestBody NewAnswerDto newAnswerDto, @PathVariable Long id){
+        ErrorHandling<AnswerDto, AnswerError> response = answerService.updateAnswer(newAnswerDto, id);
+        return ResponseResolver.resolve(response);
     }
 
     @DeleteMapping("answer/{id}")

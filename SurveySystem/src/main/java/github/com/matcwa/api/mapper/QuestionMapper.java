@@ -10,12 +10,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class QuestionMapper {
-    public static ModelMapper modelMapper = new ModelMapper();
+    private static ModelMapper modelMapper = new ModelMapper();
 
     public static QuestionDto toDto(Question question) {
-
-        Set<AnswerDto> answers = question.getAnswers().stream().map(AnswerMapper::toDto).collect(Collectors.toSet());
-        return new QuestionDto(question.getId(), question.getQuestionDescription(), answers);
+        return modelMapper.map(question,QuestionDto.class);
     }
 
     public static Question newToSource(NewQuestionDto newQuestionDto) {

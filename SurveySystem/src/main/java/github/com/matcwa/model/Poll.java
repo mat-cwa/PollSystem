@@ -1,6 +1,7 @@
 package github.com.matcwa.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -10,9 +11,9 @@ public class Poll {
     private Long id;
     private String name;
     @ManyToOne(cascade = {CascadeType.REMOVE,CascadeType.PERSIST})
-    private User owner=new User("login123","haslo"); // TODO: add owner
+    private User owner;
     @OneToMany(cascade = {CascadeType.REMOVE,CascadeType.PERSIST}, mappedBy = "poll")
-    private Set<Question> questions;
+    private Set<Question> questions=new HashSet<>();
 
     public Poll() {
     }

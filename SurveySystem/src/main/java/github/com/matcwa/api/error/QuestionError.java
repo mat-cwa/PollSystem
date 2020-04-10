@@ -4,9 +4,8 @@ import github.com.matcwa.infrastructure.ResponseError;
 
 public enum QuestionError implements ResponseError {
     EMPTY_CONTENT_ERROR("THE QUESTION CONTENT CANT BE EMPTY", 400),
-    POLL_NOT_FOUND_ERROR("Poll not exist", 404),
-    EMPTY_ANSWERS_ERROR("THE LIST OF ANSWERS CANT BE EMPTY", 400);
-
+    POLL_NOT_FOUND_ERROR("POLL DOESNT EXISTS", 404),
+    QUESTION_NOT_FOUND_ERROR("QUESTION DOESNT EXISTS", 404);
     private String message;
     private int httpCode;
 

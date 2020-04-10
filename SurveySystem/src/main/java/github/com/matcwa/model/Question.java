@@ -2,6 +2,8 @@ package github.com.matcwa.model;
 
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -10,8 +12,8 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String questionDescription;
-    @OneToMany(mappedBy = "question",cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
-    private Set<Answer> answers;
+    @OneToMany(mappedBy = "question", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private Set<Answer> answers = new HashSet<>();
     @ManyToOne
     private Poll poll;
 
@@ -21,9 +23,8 @@ public class Question {
         this.poll = poll;
     }
 
-    public Question(String questionDescription, Set<Answer> answers) {
+    public Question(String questionDescription) {
         this.questionDescription = questionDescription;
-        this.answers=answers;
     }
 
     public Question() {
@@ -62,6 +63,22 @@ public class Question {
     }
 
     public void addAnswer(Answer answer) {
-    answers.add(answer);
+        answers.add(answer);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Question)) return false;
+        Question question = (Question) o;
+        return Objects.equals(getId(), question.getId()) &&
+                Objects.equals(getQuestionDescription(), question.getQuestionDescription()) &&
+                Objects.equals(getAnswers(), question.getAnswers()) &&
+                Objects.equals(getPoll(), question.getPoll());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getQuestionDescription(), getAnswers(), getPoll());
     }
 }

@@ -2,6 +2,7 @@ package github.com.matcwa.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import java.util.Objects;
 import java.util.Set;
 
 public class UserDto {
@@ -61,5 +62,22 @@ public class UserDto {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UserDto)) return false;
+        UserDto userDto = (UserDto) o;
+        return Objects.equals(getId(), userDto.getId()) &&
+                Objects.equals(getUsername(), userDto.getUsername()) &&
+                Objects.equals(getToken(), userDto.getToken()) &&
+                Objects.equals(getPollSet(), userDto.getPollSet()) &&
+                Objects.equals(getVotes(), userDto.getVotes());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getUsername(), getToken(), getPollSet(), getVotes());
     }
 }

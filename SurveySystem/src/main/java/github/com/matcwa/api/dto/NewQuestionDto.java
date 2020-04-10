@@ -9,6 +9,13 @@ public class NewQuestionDto {
 
     private String questionDescription;
 
+    public NewQuestionDto() {
+    }
+
+    public NewQuestionDto(String questionDescription) {
+        this.questionDescription = questionDescription;
+    }
+
     public String getQuestionDescription() {
         return questionDescription;
     }

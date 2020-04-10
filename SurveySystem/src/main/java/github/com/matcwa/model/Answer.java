@@ -16,9 +16,6 @@ public class Answer {
     private Question question;
     @ElementCollection(fetch = FetchType.LAZY)
     private Set<String> ipSet =new HashSet<>();
-    @ElementCollection(fetch = FetchType.LAZY)
-    private Map<String, Date> mojampka =new HashMap<>();
-
 
     public Answer() {
     }
@@ -71,5 +68,21 @@ public class Answer {
 
     public void setIpSet(Set<String> ipSet) {
         this.ipSet = ipSet;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Answer)) return false;
+        Answer answer = (Answer) o;
+        return Objects.equals(getId(), answer.getId()) &&
+                Objects.equals(getAnswerDescription(), answer.getAnswerDescription()) &&
+                Objects.equals(getVotes(), answer.getVotes()) &&
+                Objects.equals(getQuestion(), answer.getQuestion()) &&
+                Objects.equals(getIpSet(), answer.getIpSet());}
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getAnswerDescription(), getVotes(), getQuestion(), getIpSet());
     }
 }

@@ -1,7 +1,14 @@
 package github.com.matcwa.api.dto;
 
 public class NewAnswerDto {
-public String description;
+    private String description;
+
+    public NewAnswerDto() {
+    }
+
+    public NewAnswerDto(String description) {
+        this.description = description;
+    }
 
     public String getDescription() {
         return description;

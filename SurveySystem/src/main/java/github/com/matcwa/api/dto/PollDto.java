@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.*;
 import github.com.matcwa.api.dto.QuestionDto;
 import github.com.matcwa.api.dto.UserDto;
 
+import java.util.Objects;
 import java.util.Set;
 
 public class PollDto {
@@ -59,5 +60,21 @@ public class PollDto {
 
     public void setQuestions(Set<QuestionDto> questions) {
         this.questions = questions;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PollDto)) return false;
+        PollDto pollDto = (PollDto) o;
+        return Objects.equals(getId(), pollDto.getId()) &&
+                Objects.equals(getName(), pollDto.getName()) &&
+                Objects.equals(getOwner(), pollDto.getOwner()) &&
+                Objects.equals(getQuestions(), pollDto.getQuestions());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getOwner(), getQuestions());
     }
 }

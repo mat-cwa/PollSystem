@@ -7,16 +7,19 @@ import github.com.matcwa.api.error.PollError;
 import github.com.matcwa.api.mapper.PollMapper;
 import github.com.matcwa.model.Poll;
 import github.com.matcwa.repository.PollRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 
 import static org.mockito.BDDMockito.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,7 +44,7 @@ class PollServiceTest {
         ErrorHandling<NewPollDto, PollError> response = pollService.addNewPoll(newPollDto);
         //then
         assertNull(response.getError());
-        assertEquals(response.getDto().getName(), newPollDto.getName());
+        assertEquals(response.getDto(), newPollDto);
     }
 
     @Test
@@ -69,11 +72,74 @@ class PollServiceTest {
         //then
         verify(pollRepository, times(1)).findAll();
         assertEquals(allPoll.size(), prepareAccountData().size());
-        assertEquals(allPoll.get(0).getName(), prepareDto.get(0).getName());
-        assertEquals(allPoll.get(1).getName(), prepareDto.get(1).getName());
-        assertEquals(allPoll.get(2).getName(), prepareDto.get(2).getName());
+        assertEquals(allPoll, prepareDto);
     }
 
+    @Test
+    void shouldFoundPollById() {
+        //given
+        Poll poll=new Poll();
+        poll.setId(1L);
+        poll.setName("anyPoll");
+        given(pollRepository.findById(1L)).willReturn(Optional.of(poll));
+        //when
+        ErrorHandling<PollDto, PollError> response = pollService.getPollById(1L);
+        //then
+        assertNull(response.getError());
+        assertEquals(response.getDto(),PollMapper.toDto(poll));
+    }
+
+    @Test
+    void shouldReturnPollNotFoundError() {
+        //given
+        given(pollRepository.findById(1L)).willReturn(Optional.empty());
+        NewPollDto newPollDto=new NewPollDto("anyName");
+        //when
+        ErrorHandling<PollDto, PollError> getPollByIdResponse = pollService.getPollById(1L);
+        ErrorHandling<PollDto, PollError> pollUpdateRespone = pollService.updatePoll(newPollDto,1L);
+        //then
+        assertNull(getPollByIdResponse.getDto());
+        assertEquals(getPollByIdResponse.getError(),PollError.POLL_NOT_FOUND_ERROR);
+
+        assertNull(pollUpdateRespone.getDto());
+        assertEquals(pollUpdateRespone.getError(),PollError.POLL_NOT_FOUND_ERROR);
+    }
+
+    @Test
+    void shouldReturnUpdatedPollAndNullPollError() {
+        //given
+        Poll poll=new Poll();
+        poll.setId(1L);
+        poll.setName("currentName");
+        given(pollRepository.findById(1L)).willReturn(Optional.of(poll));
+        NewPollDto newPollDto=new NewPollDto("editedName");
+        //when
+        ErrorHandling<PollDto, PollError> response = pollService.updatePoll(newPollDto,1L);
+        //then
+        assertNull(response.getError());
+        assertEquals(response.getDto().getName(),newPollDto.getName());
+    }
+
+    @Test
+    void shouldReturnNotUpdatedPollAndNullPollError() {
+        //given
+        Poll poll=new Poll();
+        poll.setId(1L);
+        poll.setName("currentName");
+        given(pollRepository.findById(1L)).willReturn(Optional.of(poll));
+        NewPollDto emptyNameRequest=new NewPollDto("");
+        NewPollDto nullNameRequest=new NewPollDto(null);
+        //when
+        ErrorHandling<PollDto, PollError> emptyNameResponse = pollService.updatePoll(emptyNameRequest,1L);
+        ErrorHandling<PollDto, PollError> nullNameResponse = pollService.updatePoll(nullNameRequest,1L);
+
+        //then
+        assertNull(emptyNameResponse.getError());
+        assertEquals(emptyNameResponse.getDto().getName(),poll.getName());
+
+        assertNull(nullNameResponse.getError());
+        assertEquals(nullNameResponse.getDto().getName(),poll.getName());
+    }
     private List<Poll> prepareAccountData() {
         Poll poll1 = new Poll();
         poll1.setName("poll1");

@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -32,6 +31,12 @@ public class PollController {
         return ResponseResolver.resolve(poll);
     }
 
+    @PutMapping("poll/update/{id}")
+    public ResponseEntity updatePoll(@RequestBody NewPollDto newPollDto, @PathVariable Long id){
+        ErrorHandling<PollDto, PollError> response = pollService.updatePoll(newPollDto, id); //postman
+        return ResponseResolver.resolve(response);
+    }
+
     @GetMapping("/all")
     public List<PollDto> getAll() {
         return pollService.getAll();
@@ -40,7 +45,7 @@ public class PollController {
 
     @GetMapping("/poll/{id}")
     public ResponseEntity getById(@PathVariable Long id) {
-        Optional<PollDto> pollById = pollService.getPollById(id);
+        ErrorHandling<PollDto, PollError> pollById = pollService.getPollById(id);
         return ResponseResolver.resolve(pollById);
     }
 

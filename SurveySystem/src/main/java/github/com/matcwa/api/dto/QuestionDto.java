@@ -3,6 +3,7 @@ package github.com.matcwa.api.dto;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import java.util.Objects;
 import java.util.Set;
 
 public class QuestionDto {
@@ -52,5 +53,21 @@ public class QuestionDto {
 
     public void setPoll(PollDto poll) {
         this.poll = poll;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof QuestionDto)) return false;
+        QuestionDto that = (QuestionDto) o;
+        return Objects.equals(getId(), that.getId()) &&
+                Objects.equals(getQuestionDescription(), that.getQuestionDescription()) &&
+                Objects.equals(getAnswers(), that.getAnswers()) &&
+                Objects.equals(getPoll(), that.getPoll());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getQuestionDescription(), getAnswers());
     }
 }
