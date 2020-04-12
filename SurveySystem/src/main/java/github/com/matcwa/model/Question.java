@@ -23,8 +23,9 @@ public class Question {
         this.poll = poll;
     }
 
-    public Question(String questionDescription) {
+    public Question(String questionDescription,Poll poll) {
         this.questionDescription = questionDescription;
+        this.poll=poll;
     }
 
     public Question() {

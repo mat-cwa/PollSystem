@@ -2,6 +2,7 @@ package github.com.matcwa.service;
 
 import github.com.matcwa.api.dto.UserDto;
 import github.com.matcwa.api.dto.UserLoginDto;
+import github.com.matcwa.api.dto.UserRegistrationDto;
 import github.com.matcwa.api.error.ErrorHandling;
 import github.com.matcwa.api.error.UserError;
 import github.com.matcwa.api.jwt.TokenService;
@@ -38,6 +39,11 @@ public class UserService {
             }, () -> errorHandling.setError(UserError.USER_NOT_FOUND_ERROR));
         }
         return errorHandling;
+    }
+
+    @Transactional
+    public void registration(UserRegistrationDto userRegistrationDto){
+
     }
 
     private boolean checkPassword(String passwordToCheck, User user) {

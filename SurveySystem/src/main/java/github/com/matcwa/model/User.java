@@ -1,6 +1,7 @@
 package github.com.matcwa.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -12,16 +13,16 @@ public class User {
     private String password;
     private Role role;
     @OneToMany(mappedBy = "owner")
-    private Set<Poll> pollSet;
+    private Set<Poll> pollSet=new HashSet<>();
     @OneToMany(mappedBy = "owner")
     private Set<Vote> votes;
 
     public User() {
     }
 
-    public User(String username,String password) {
+    public User(String username, String password) {
         this.username = username;
-        this.password=password;
+        this.password = password;
     }
 
     public Long getId() {
@@ -71,5 +72,9 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public void addPoll(Poll poll) {
+        pollSet.add(poll);
     }
 }

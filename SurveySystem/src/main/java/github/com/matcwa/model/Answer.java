@@ -11,7 +11,7 @@ public class Answer {
     private Long id;
     private String answerDescription;
     @OneToMany(mappedBy = "answer",fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
-    private Set<Vote> votes;
+    private Set<Vote> votes=new HashSet<>();
     @ManyToOne
     private Question question;
     @ElementCollection(fetch = FetchType.LAZY)
@@ -26,7 +26,12 @@ public class Answer {
         this.question = question;
     }
 
-    public void addVote(Vote vote,String ipAddress){
+    public Answer(String answerDescription, Question question) {
+        this.answerDescription = answerDescription;
+        this.question = question;
+    }
+
+    public void addVote(Vote vote, String ipAddress){
         votes.add(vote);
         ipSet.add(ipAddress);
     }
@@ -79,7 +84,8 @@ public class Answer {
                 Objects.equals(getAnswerDescription(), answer.getAnswerDescription()) &&
                 Objects.equals(getVotes(), answer.getVotes()) &&
                 Objects.equals(getQuestion(), answer.getQuestion()) &&
-                Objects.equals(getIpSet(), answer.getIpSet());}
+                Objects.equals(getIpSet(), answer.getIpSet());
+    }
 
     @Override
     public int hashCode() {

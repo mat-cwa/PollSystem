@@ -1,5 +1,6 @@
 package github.com.matcwa.controller;
 
+import github.com.matcwa.api.dto.DeleteSuccessResponseDto;
 import github.com.matcwa.api.dto.NewQuestionDto;
 import github.com.matcwa.api.dto.PollDto;
 import github.com.matcwa.api.dto.QuestionDto;
@@ -24,20 +25,20 @@ public class QuestionController {
 
 
     @PostMapping("/poll/{pollId}/newQuestion")
-    public ResponseEntity createNewQuestion(@RequestBody NewQuestionDto newQuestionDto, @PathVariable Long pollId){
-        ErrorHandling<PollDto, QuestionError> newQuestion = questionService.createNewQuestion(newQuestionDto,pollId);
+    public ResponseEntity createNewQuestion(@RequestBody NewQuestionDto newQuestionDto, @PathVariable Long pollId,@RequestHeader("Authorization") String token){
+        ErrorHandling<PollDto, QuestionError> newQuestion = questionService.createNewQuestion(newQuestionDto,pollId,token);
         return ResponseResolver.resolve(newQuestion);
     }
 
     @PutMapping("question/update/{id}")
-    public ResponseEntity updateQuestion(@RequestBody NewQuestionDto newQuestionDto, @PathVariable Long id){
-        ErrorHandling<QuestionDto, QuestionError> response = questionService.updateQuestion(newQuestionDto, id);
+    public ResponseEntity updateQuestion(@RequestBody NewQuestionDto newQuestionDto, @PathVariable Long id,@RequestHeader("Authorization") String token){
+        ErrorHandling<QuestionDto, QuestionError> response = questionService.updateQuestion(newQuestionDto, id,token);
         return ResponseResolver.resolve(response);
     }
 
     @DeleteMapping("question/{id}")
-    public HttpStatus deleteQuestionById(@PathVariable Long id){
-        questionService.deleteQuestion(id);
-        return HttpStatus.OK;
+    public ResponseEntity deletePollById(@PathVariable Long id,@RequestHeader("Authorization") String token) {
+        ErrorHandling<DeleteSuccessResponseDto, QuestionError> response = questionService.deleteQuestion(id, token);
+        return ResponseResolver.resolve(response);
     }
 }

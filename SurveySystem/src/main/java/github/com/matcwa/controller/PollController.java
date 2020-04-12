@@ -1,12 +1,12 @@
 package github.com.matcwa.controller;
 
+import github.com.matcwa.api.dto.DeleteSuccessResponseDto;
 import github.com.matcwa.api.dto.NewPollDto;
 import github.com.matcwa.api.error.*;
 import github.com.matcwa.infrastructure.ResponseResolver;
 import github.com.matcwa.api.dto.PollDto;
 import github.com.matcwa.service.PollService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,14 +26,14 @@ public class PollController {
 
 
     @PostMapping("/newPoll")
-    public ResponseEntity createNowPoll(@RequestBody NewPollDto newPollDto) {
-        ErrorHandling<NewPollDto, PollError> poll = pollService.addNewPoll(newPollDto);
+    public ResponseEntity createNewPoll(@RequestBody NewPollDto newPollDto,@RequestHeader("Authorization") String token) {
+        ErrorHandling<NewPollDto, PollError> poll = pollService.addNewPoll(newPollDto,token);
         return ResponseResolver.resolve(poll);
     }
 
     @PutMapping("poll/update/{id}")
-    public ResponseEntity updatePoll(@RequestBody NewPollDto newPollDto, @PathVariable Long id){
-        ErrorHandling<PollDto, PollError> response = pollService.updatePoll(newPollDto, id); //postman
+    public ResponseEntity updatePoll(@RequestBody NewPollDto newPollDto, @PathVariable Long id,@RequestHeader("Authorization") String token){
+        ErrorHandling<PollDto, PollError> response = pollService.updatePoll(newPollDto, id,token);
         return ResponseResolver.resolve(response);
     }
 
@@ -51,9 +51,9 @@ public class PollController {
 
 
     @DeleteMapping("poll/{id}")
-    public HttpStatus deletePollById(@PathVariable Long id) {
-        pollService.deletePoll(id);
-        return HttpStatus.OK;
+    public ResponseEntity deletePollById(@PathVariable Long id,@RequestHeader("Authorization") String token) {
+        ErrorHandling<DeleteSuccessResponseDto, PollError> response = pollService.deletePoll(id, token);
+        return ResponseResolver.resolve(response);
     }
 }
 

@@ -19,6 +19,7 @@ public class ResponseResolver {
             ErrorJS errorforjs = new ErrorJS(data.getError().getMessage());
             return new ResponseEntity<>(errorforjs, HttpStatus.valueOf(data.getError().getHttpCode()));
         }
+
         return ResponseEntity.ok(data.getDto());
     }
 

@@ -1,9 +1,6 @@
 package github.com.matcwa.controller;
 
-import github.com.matcwa.api.dto.AnswerDto;
-import github.com.matcwa.api.dto.NewAnswerDto;
-import github.com.matcwa.api.dto.NewVoteDto;
-import github.com.matcwa.api.dto.QuestionDto;
+import github.com.matcwa.api.dto.*;
 import github.com.matcwa.api.error.AnswerError;
 import github.com.matcwa.api.error.ErrorHandling;
 import github.com.matcwa.infrastructure.ResponseResolver;
@@ -26,25 +23,25 @@ public class AnswerController {
     }
 
     @PostMapping("/question/{questionId}/newAnswer")
-    public ResponseEntity createNewAnswer(@RequestBody NewAnswerDto newAnswerDto, @PathVariable Long questionId){
-        ErrorHandling<QuestionDto, AnswerError> newAnswer = answerService.createNewAnswer(newAnswerDto, questionId);
+    public ResponseEntity createNewAnswer(@RequestBody NewAnswerDto newAnswerDto, @PathVariable Long questionId,@RequestHeader("Authorization") String token){
+        ErrorHandling<QuestionDto, AnswerError> newAnswer = answerService.createNewAnswer(newAnswerDto, questionId,token);
         return ResponseResolver.resolve(newAnswer);
     }
 
     @PutMapping("answer/update/{id}")
-    public ResponseEntity updateAnswer(@RequestBody NewAnswerDto newAnswerDto, @PathVariable Long id){
-        ErrorHandling<AnswerDto, AnswerError> response = answerService.updateAnswer(newAnswerDto, id);
+    public ResponseEntity updateAnswer(@RequestBody NewAnswerDto newAnswerDto, @PathVariable Long id,@RequestHeader("Authorization") String token){
+        ErrorHandling<AnswerDto, AnswerError> response = answerService.updateAnswer(newAnswerDto, id,token);
         return ResponseResolver.resolve(response);
     }
 
     @DeleteMapping("answer/{id}")
-    public HttpStatus deleteAnswerById(@PathVariable Long id){
-        answerService.deleteAnswer(id);
-        return HttpStatus.OK;
+    public ResponseEntity deletePollById(@PathVariable Long id,@RequestHeader("Authorization") String token) {
+        ErrorHandling<DeleteSuccessResponseDto, AnswerError> response = answerService.deleteAnswer(id, token);
+        return ResponseResolver.resolve(response);
     }
     @PostMapping("/answer/{answerId}/addVote")
-    public ResponseEntity addVoteToAnswer(@PathVariable Long answerId, @RequestBody NewVoteDto newVoteDto, HttpServletRequest httpRequest){
-        ErrorHandling<AnswerDto, AnswerError> addVote = answerService.addVoteToAnswer(answerId, newVoteDto, httpRequest);
+    public ResponseEntity addVoteToAnswer(@PathVariable Long answerId, HttpServletRequest httpRequest){
+        ErrorHandling<AnswerDto, AnswerError> addVote = answerService.addVoteToAnswer(answerId, httpRequest);
         return ResponseResolver.resolve(addVote);
     }
 }

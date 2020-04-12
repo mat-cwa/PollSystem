@@ -1,19 +1,18 @@
 package github.com.matcwa.service;
 
-import github.com.matcwa.api.dto.AnswerDto;
-import github.com.matcwa.api.dto.NewAnswerDto;
-import github.com.matcwa.api.dto.NewVoteDto;
-import github.com.matcwa.api.dto.QuestionDto;
+import github.com.matcwa.api.dto.*;
 import github.com.matcwa.api.error.AnswerError;
 import github.com.matcwa.api.error.ErrorHandling;
+import github.com.matcwa.api.jwt.TokenService;
 import github.com.matcwa.api.mapper.AnswerMapper;
 import github.com.matcwa.api.mapper.QuestionMapper;
 import github.com.matcwa.api.mapper.VoteMapper;
 import github.com.matcwa.model.Answer;
-import github.com.matcwa.model.Question;
+import github.com.matcwa.model.Role;
 import github.com.matcwa.model.Vote;
 import github.com.matcwa.repository.AnswerRepository;
 import github.com.matcwa.repository.QuestionRepository;
+import github.com.matcwa.repository.UserRepository;
 import github.com.matcwa.repository.VoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,31 +26,93 @@ public class AnswerService {
     private AnswerRepository answerRepository;
     private QuestionRepository questionRepository;
     private VoteRepository voteRepository;
+    private UserRepository userRepository;
+    private TokenService tokenService;
 
     @Autowired
-    public AnswerService(AnswerRepository answerRepository, QuestionRepository questionRepository, VoteRepository voteRepository) {
+    public AnswerService(AnswerRepository answerRepository, QuestionRepository questionRepository, VoteRepository voteRepository, UserRepository userRepository, TokenService tokenService) {
         this.answerRepository = answerRepository;
         this.questionRepository = questionRepository;
         this.voteRepository = voteRepository;
+        this.userRepository = userRepository;
+        this.tokenService = tokenService;
     }
 
-    public ErrorHandling<QuestionDto, AnswerError> createNewAnswer(NewAnswerDto newAnswerDto, Long id) {
-        ErrorHandling<NewAnswerDto, AnswerError> newAnswer = validateNewAnswer(newAnswerDto);
+    public ErrorHandling<QuestionDto, AnswerError> createNewAnswer(NewAnswerDto newAnswerDto, Long id, String token) {
         ErrorHandling<QuestionDto, AnswerError> response = new ErrorHandling<>();
-
-        if (newAnswer.getDto() != null) {
-            questionRepository.findById(id).ifPresentOrElse(question -> {
-                Answer answer = AnswerMapper.newToSource(newAnswerDto);
-                answer.setQuestion(question);
-                question.addAnswer(answer);
-                answerRepository.save(answer);
-                response.setDto(QuestionMapper.toDto(question));
-
-            }, () -> response.setError(AnswerError.QUESTION_NOT_FOUND_ERROR));
-        } else {
-            response.setError(newAnswer.getError());
-        }
+        questionRepository.findById(id).ifPresentOrElse(question -> {
+            userRepository.findByUsername(tokenService.getUsernameFromToken(token)).ifPresentOrElse(user -> {
+                ErrorHandling<NewAnswerDto, AnswerError> newAnswer = validateNewAnswer(newAnswerDto);
+                if (question.getPoll().getOwner() == user) {
+                    if (newAnswer.getDto() != null) {
+                        Answer answer = AnswerMapper.newToSource(newAnswerDto);
+                        answer.setQuestion(question);
+                        question.addAnswer(answer);
+                        answerRepository.save(answer);
+                        response.setDto(QuestionMapper.toDto(question));
+                    } else {
+                        response.setError(newAnswer.getError());
+                    }
+                } else {
+                    response.setError(AnswerError.AUTHORIZATION_ERROR);
+                }
+            }, () -> response.setError(AnswerError.USER_NOT_FOUND_ERROR));
+        }, () -> response.setError(AnswerError.QUESTION_NOT_FOUND_ERROR));
         return response;
+    }
+
+    public ErrorHandling<AnswerDto, AnswerError> addVoteToAnswer(Long id, HttpServletRequest httpServletRequest) {
+        String remoteAddr = httpServletRequest.getRemoteAddr();
+        ErrorHandling<AnswerDto, AnswerError> response = new ErrorHandling<>();
+        answerRepository.findById(id).ifPresentOrElse(answer -> {
+            if (!isVoteForThisIpAddressAlreadyAdded(remoteAddr, answer)) {
+                Vote vote = new Vote();
+                answer.addVote(vote, remoteAddr);
+                vote.setAnswer(answer);
+                voteRepository.save(vote);
+                response.setDto(AnswerMapper.toDto(answer));
+            } else response.setError(AnswerError.ONE_VOTE_PER_IP_ERROR);
+        }, () -> response.setError(AnswerError.ANSWER_NOT_FOUND_ERROR));
+        return response;
+    }
+
+
+    public ErrorHandling<AnswerDto, AnswerError> updateAnswer(NewAnswerDto newAnswerDto, long id, String token) {
+        ErrorHandling<AnswerDto, AnswerError> response = new ErrorHandling<>();
+        answerRepository.findById(id).ifPresentOrElse(answer -> {
+            userRepository.findByUsername(tokenService.getUsernameFromToken(token)).ifPresentOrElse(user -> {
+                if (answer.getQuestion().getPoll().getOwner() == user || tokenService.getRoleFromToken(token).equals(Role.ADMIN.name())) {
+                    if (newAnswerDto.getDescription() != null && !newAnswerDto.getDescription().isEmpty()) {
+                        answer.setAnswerDescription(newAnswerDto.getDescription());
+                        response.setDto(AnswerMapper.toDto(answer));
+                    } else {
+                        response.setDto(AnswerMapper.toDto(answer));
+                    }
+                } else {
+                    response.setError(AnswerError.AUTHORIZATION_ERROR);
+                }
+            }, () -> response.setError(AnswerError.USER_NOT_FOUND_ERROR));
+        }, () -> response.setError(AnswerError.ANSWER_NOT_FOUND_ERROR));
+        return response;
+    }
+
+    public ErrorHandling<DeleteSuccessResponseDto, AnswerError> deleteAnswer(Long id, String token) {
+        ErrorHandling<DeleteSuccessResponseDto, AnswerError> response = new ErrorHandling<>();
+        answerRepository.findById(id).ifPresentOrElse(answer -> {
+            userRepository.findByUsername(tokenService.getUsernameFromToken(token)).ifPresentOrElse(user -> {
+                if (answer.getQuestion().getPoll().getOwner() == user || tokenService.getRoleFromToken(token).equals("ADMIN")) {
+                    answerRepository.deleteById(id);
+                    response.setDto(new DeleteSuccessResponseDto("Successful!"));
+                } else {
+                    response.setError(AnswerError.AUTHORIZATION_ERROR);
+                }
+            }, () -> response.setError(AnswerError.USER_NOT_FOUND_ERROR));
+        }, () -> response.setError(AnswerError.ANSWER_NOT_FOUND_ERROR));
+        return response;
+    }
+
+    private boolean isVoteForThisIpAddressAlreadyAdded(String ipAddress, Answer answer) {
+        return answer.getIpSet().contains(ipAddress);
     }
 
     private ErrorHandling<NewAnswerDto, AnswerError> validateNewAnswer(NewAnswerDto newAnswerDto) {
@@ -62,49 +123,5 @@ public class AnswerService {
             newAnswer.setDto(newAnswerDto);
         }
         return newAnswer;
-    }
-
-    public void deleteAnswer(Long id) {
-        answerRepository.deleteById(id);
-    }
-
-    public ErrorHandling<AnswerDto, AnswerError> addVoteToAnswer(Long id, NewVoteDto newVoteDto, HttpServletRequest httpServletRequest) {
-        String remoteAddr = httpServletRequest.getRemoteAddr();
-        ErrorHandling<AnswerDto, AnswerError> addVote = validateVote(remoteAddr, id);
-        answerRepository.findById(id).ifPresent(answer -> {
-            if (addVote.getDto() != null) {
-                Vote vote = VoteMapper.newToSource(newVoteDto);
-                answer.addVote(vote, remoteAddr);
-                vote.setAnswer(answer);
-                voteRepository.save(vote);
-            }
-        });
-        return addVote;
-    }
-
-
-    public ErrorHandling<AnswerDto, AnswerError> updateAnswer(NewAnswerDto newAnswerDto, long id) {
-        ErrorHandling<AnswerDto, AnswerError> response = new ErrorHandling<>();
-        answerRepository.findById(id).ifPresentOrElse(answer -> {
-            if (newAnswerDto.getDescription() != null && !newAnswerDto.getDescription().isEmpty()) {
-                answer.setAnswerDescription(newAnswerDto.getDescription());
-                response.setDto(AnswerMapper.toDto(answer));
-            } else {
-                response.setDto(AnswerMapper.toDto(answer));
-            }
-        }, () -> response.setError(AnswerError.ANSWER_NOT_FOUND_ERROR));
-        return response;
-    }
-
-    private ErrorHandling<AnswerDto, AnswerError> validateVote(String ipAddress, Long id) {
-        ErrorHandling<AnswerDto, AnswerError> addVote = new ErrorHandling<>();
-        answerRepository.findById(id).ifPresentOrElse(answer -> {
-            if (answer.getIpSet().contains(ipAddress)) {
-                addVote.setError(AnswerError.ONE_VOTE_PER_IP_ERROR);
-            } else {
-                addVote.setDto(AnswerMapper.toDto(answer));
-            }
-        }, () -> addVote.setError(AnswerError.ANSWER_NOT_FOUND_ERROR));
-        return addVote;
     }
 }

@@ -68,6 +68,6 @@ public class QuestionDto {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getQuestionDescription(), getAnswers());
+        return Objects.hash(getId(), getQuestionDescription());
     }
 }

@@ -33,7 +33,7 @@ public class DbRunner implements CommandLineRunner {
         Set<Answer> answers=new HashSet<>();
         Set<Vote> votes = new HashSet<>();
 
-        Question question=new Question("pierwsze pytanie dodane przez DbRunner");
+        Question question=new Question("pierwsze pytanie dodane przez DbRunner",null);
         question.setAnswers(answers);
         Answer answer=new Answer("pierwsza odpowiedz przez DbRunner",votes,question);
         Vote vote=new Vote(answer);

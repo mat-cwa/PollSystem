@@ -1,17 +1,21 @@
 package github.com.matcwa.service;
 
+import github.com.matcwa.api.dto.DeleteSuccessResponseDto;
 import github.com.matcwa.api.dto.NewQuestionDto;
 import github.com.matcwa.api.dto.PollDto;
 import github.com.matcwa.api.dto.QuestionDto;
 import github.com.matcwa.api.error.ErrorHandling;
 import github.com.matcwa.api.error.QuestionError;
+import github.com.matcwa.api.jwt.TokenService;
 import github.com.matcwa.api.mapper.PollMapper;
 import github.com.matcwa.api.mapper.QuestionMapper;
 import github.com.matcwa.model.Poll;
 import github.com.matcwa.model.Question;
+import github.com.matcwa.model.Role;
 import github.com.matcwa.repository.PollRepository;
 import github.com.matcwa.repository.QuestionRepository;
 
+import github.com.matcwa.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,33 +27,73 @@ import java.util.Optional;
 public class QuestionService {
     private QuestionRepository questionRepository;
     private PollRepository pollRepository;
+    private UserRepository userRepository;
+    private TokenService tokenService;
 
     @Autowired
-    public QuestionService(QuestionRepository questionRepository, PollRepository pollRepository) {
+    public QuestionService(QuestionRepository questionRepository, PollRepository pollRepository, UserRepository userRepository, TokenService tokenService) {
         this.questionRepository = questionRepository;
         this.pollRepository = pollRepository;
+        this.userRepository = userRepository;
+        this.tokenService = tokenService;
     }
 
-    public ErrorHandling<PollDto, QuestionError> createNewQuestion(NewQuestionDto newQuestionDto, Long pollId) {
-        ErrorHandling<NewQuestionDto, QuestionError> newQuestion = validateNewQuestion(newQuestionDto);
+    public ErrorHandling<PollDto, QuestionError> createNewQuestion(NewQuestionDto newQuestionDto, Long pollId, String token) {
         ErrorHandling<PollDto, QuestionError> response = new ErrorHandling<>();
-        if (newQuestion.getDto() != null) {
-            pollRepository.findById(pollId).ifPresentOrElse(poll -> {
+        pollRepository.findById(pollId).ifPresentOrElse(poll -> {
+            userRepository.findByUsername(tokenService.getUsernameFromToken(token)).ifPresentOrElse(user -> {
+                ErrorHandling<NewQuestionDto, QuestionError> newQuestion = validateNewQuestion(newQuestionDto);
+                if (poll.getOwner() == user) {
+                    if (newQuestion.getDto() != null) {
                         Question question = QuestionMapper.newToSource(newQuestionDto);
                         question.setPoll(poll);
                         poll.addQuestion(question);
                         questionRepository.save(question);
                         response.setDto(PollMapper.toDto(poll));
-                    },
-                    () -> response.setError(QuestionError.POLL_NOT_FOUND_ERROR));
-        } else {
-            response.setError(newQuestion.getError());
-        }
+                    } else {
+                        response.setError(newQuestion.getError());
+                    }
+                } else {
+                    response.setError(QuestionError.AUTHORIZATION_ERROR);
+                }
+            }, () -> response.setError(QuestionError.USER_NOT_FOUND_ERROR));
+        }, () -> response.setError(QuestionError.POLL_NOT_FOUND_ERROR));
         return response;
     }
 
-    public void deleteQuestion(Long id) {
-        questionRepository.deleteById(id);
+    public ErrorHandling<DeleteSuccessResponseDto, QuestionError> deleteQuestion(Long id, String token) {
+        ErrorHandling<DeleteSuccessResponseDto, QuestionError> response = new ErrorHandling<>();
+        questionRepository.findById(id).ifPresentOrElse(question -> {
+            userRepository.findByUsername(tokenService.getUsernameFromToken(token)).ifPresentOrElse(user -> {
+                if (question.getPoll().getOwner() == user || tokenService.getRoleFromToken(token).equals("ADMIN")) {
+                    questionRepository.deleteById(id);
+                    response.setDto(new DeleteSuccessResponseDto("Successful!"));
+                } else {
+                    response.setError(QuestionError.AUTHORIZATION_ERROR);
+                }
+            }, () -> response.setError(QuestionError.USER_NOT_FOUND_ERROR));
+        }, () -> response.setError(QuestionError.QUESTION_NOT_FOUND_ERROR));
+        return response;
+    }
+
+
+    public ErrorHandling<QuestionDto, QuestionError> updateQuestion(NewQuestionDto newQuestionDto, Long id, String token) {
+        ErrorHandling<QuestionDto, QuestionError> response = new ErrorHandling<>();
+        questionRepository.findById(id).ifPresentOrElse(question -> {
+            userRepository.findByUsername(tokenService.getUsernameFromToken(token)).ifPresentOrElse(user -> {
+                if (question.getPoll().getOwner() == user || tokenService.getRoleFromToken(token).equals(Role.ADMIN.name())) {
+                    if (newQuestionDto.getQuestionDescription() != null && !newQuestionDto.getQuestionDescription().isEmpty()) {
+                        question.setQuestionDescription(newQuestionDto.getQuestionDescription());
+                        response.setDto(QuestionMapper.toDto(question));
+                    } else {
+                        response.setDto(QuestionMapper.toDto(question));
+                    }
+                } else {
+                    response.setError(QuestionError.AUTHORIZATION_ERROR);
+                }
+            }, () -> response.setError(QuestionError.USER_NOT_FOUND_ERROR));
+        }, () -> response.setError(QuestionError.QUESTION_NOT_FOUND_ERROR));
+        return response;
     }
 
 
@@ -62,19 +106,6 @@ public class QuestionService {
             question.setDto(newQuestionDto);
         }
         return question;
-    }
-
-    public ErrorHandling<QuestionDto, QuestionError> updateQuestion(NewQuestionDto newQuestionDto, Long id) {
-        ErrorHandling<QuestionDto, QuestionError> response = new ErrorHandling<>();
-        questionRepository.findById(id).ifPresentOrElse(question -> {
-            if (newQuestionDto.getQuestionDescription() != null && !newQuestionDto.getQuestionDescription().isEmpty()) {
-                question.setQuestionDescription(newQuestionDto.getQuestionDescription());
-                response.setDto(QuestionMapper.toDto(question));
-            } else {
-                response.setDto(QuestionMapper.toDto(question));
-            }
-        }, () -> response.setError(QuestionError.QUESTION_NOT_FOUND_ERROR));
-        return response;
     }
 
 }

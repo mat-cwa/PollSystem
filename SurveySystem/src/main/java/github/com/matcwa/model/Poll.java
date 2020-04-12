@@ -2,6 +2,7 @@ package github.com.matcwa.model;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -21,6 +22,10 @@ public class Poll {
     public Poll(String name, Set<Question> questions) {
         this.name = name;
         this.questions = questions;
+    }
+    public Poll(String name, User owner) {
+        this.name = name;
+        this.owner = owner;
     }
 
     public Question addQuestion(Question question) {
@@ -60,6 +65,19 @@ public class Poll {
         this.questions = questions;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Poll)) return false;
+        Poll poll = (Poll) o;
+        return Objects.equals(getId(), poll.getId()) &&
+                Objects.equals(getName(), poll.getName()) &&
+                Objects.equals(getOwner(), poll.getOwner()) &&
+                Objects.equals(getQuestions(), poll.getQuestions());
+    }
 
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getOwner(), getQuestions());
+    }
 }

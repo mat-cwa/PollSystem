@@ -2,6 +2,7 @@ package github.com.matcwa.model;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 public class Vote {
@@ -45,5 +46,21 @@ public class Vote {
 
     public void setAnswer(Answer answer) {
         this.answer = answer;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Vote)) return false;
+        Vote vote = (Vote) o;
+        return Objects.equals(getId(), vote.getId()) &&
+                Objects.equals(getOwner(), vote.getOwner()) &&
+                Objects.equals(getAnswer(), vote.getAnswer()) &&
+                Objects.equals(date, vote.date);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getOwner(), getAnswer(), date);
     }
 }
