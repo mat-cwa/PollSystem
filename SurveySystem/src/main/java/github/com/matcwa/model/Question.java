@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
+@Table(name = "QUESTION", schema = "POLL")
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,7 +16,14 @@ public class Question {
     @OneToMany(mappedBy = "question", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private Set<Answer> answers = new HashSet<>();
     @ManyToOne
+    @JoinColumn(name = "fk_poll")
     private Poll poll;
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "question_ipset",
+            joinColumns = @JoinColumn(name = "fk_question"),
+            schema = "POLL")
+    @JoinColumn(name = "ip_set")
+    private Set<String> ipSet = new HashSet<>();
 
     public Question(String questionDescription, Set<Answer> answers, Poll poll) {
         this.questionDescription = questionDescription;
@@ -23,12 +31,16 @@ public class Question {
         this.poll = poll;
     }
 
-    public Question(String questionDescription,Poll poll) {
+    public Question(String questionDescription, Poll poll) {
         this.questionDescription = questionDescription;
-        this.poll=poll;
+        this.poll = poll;
     }
 
     public Question() {
+    }
+
+    public void addIpAdress(String ip) {
+        ipSet.add(ip);
     }
 
     public Long getId() {
@@ -67,6 +79,14 @@ public class Question {
         answers.add(answer);
     }
 
+    public Set<String> getIpSet() {
+        return ipSet;
+    }
+
+    public void setIpSet(Set<String> ipSet) {
+        this.ipSet = ipSet;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -76,10 +96,5 @@ public class Question {
                 Objects.equals(getQuestionDescription(), question.getQuestionDescription()) &&
                 Objects.equals(getAnswers(), question.getAnswers()) &&
                 Objects.equals(getPoll(), question.getPoll());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getQuestionDescription(), getAnswers(), getPoll());
     }
 }

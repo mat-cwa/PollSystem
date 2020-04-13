@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.util.*;
 
 @Entity
+@Table(name = "ANSWER", schema = "POLL")
 public class Answer {
 
     @Id
@@ -12,10 +13,10 @@ public class Answer {
     private String answerDescription;
     @OneToMany(mappedBy = "answer",fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
     private Set<Vote> votes=new HashSet<>();
+
     @ManyToOne
+    @JoinColumn(name="fk_question")
     private Question question;
-    @ElementCollection(fetch = FetchType.LAZY)
-    private Set<String> ipSet =new HashSet<>();
 
     public Answer() {
     }
@@ -33,7 +34,7 @@ public class Answer {
 
     public void addVote(Vote vote, String ipAddress){
         votes.add(vote);
-        ipSet.add(ipAddress);
+        vote.getAnswer().getQuestion().addIpAdress(ipAddress);
     }
     public Long getId() {
         return id;
@@ -67,13 +68,6 @@ public class Answer {
         this.question = question;
     }
 
-    public Set<String> getIpSet() {
-        return ipSet;
-    }
-
-    public void setIpSet(Set<String> ipSet) {
-        this.ipSet = ipSet;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -83,12 +77,7 @@ public class Answer {
         return Objects.equals(getId(), answer.getId()) &&
                 Objects.equals(getAnswerDescription(), answer.getAnswerDescription()) &&
                 Objects.equals(getVotes(), answer.getVotes()) &&
-                Objects.equals(getQuestion(), answer.getQuestion()) &&
-                Objects.equals(getIpSet(), answer.getIpSet());
+                Objects.equals(getQuestion(), answer.getQuestion());
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getAnswerDescription(), getVotes(), getQuestion(), getIpSet());
-    }
 }

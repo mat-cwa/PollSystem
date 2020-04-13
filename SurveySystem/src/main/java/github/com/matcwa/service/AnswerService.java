@@ -43,7 +43,7 @@ public class AnswerService {
         questionRepository.findById(id).ifPresentOrElse(question -> {
             userRepository.findByUsername(tokenService.getUsernameFromToken(token)).ifPresentOrElse(user -> {
                 ErrorHandling<NewAnswerDto, AnswerError> newAnswer = validateNewAnswer(newAnswerDto);
-                if (question.getPoll().getOwner() == user) {
+                if (question.getPoll().getOwner() == user) { //todo admin
                     if (newAnswer.getDto() != null) {
                         Answer answer = AnswerMapper.newToSource(newAnswerDto);
                         answer.setQuestion(question);
@@ -67,9 +67,9 @@ public class AnswerService {
         answerRepository.findById(id).ifPresentOrElse(answer -> {
             if (!isVoteForThisIpAddressAlreadyAdded(remoteAddr, answer)) {
                 Vote vote = new Vote();
-                answer.addVote(vote, remoteAddr);
                 vote.setAnswer(answer);
                 voteRepository.save(vote);
+                answer.addVote(vote, remoteAddr);
                 response.setDto(AnswerMapper.toDto(answer));
             } else response.setError(AnswerError.ONE_VOTE_PER_IP_ERROR);
         }, () -> response.setError(AnswerError.ANSWER_NOT_FOUND_ERROR));
@@ -112,7 +112,7 @@ public class AnswerService {
     }
 
     private boolean isVoteForThisIpAddressAlreadyAdded(String ipAddress, Answer answer) {
-        return answer.getIpSet().contains(ipAddress);
+        return answer.getQuestion().getIpSet().contains(ipAddress);
     }
 
     private ErrorHandling<NewAnswerDto, AnswerError> validateNewAnswer(NewAnswerDto newAnswerDto) {

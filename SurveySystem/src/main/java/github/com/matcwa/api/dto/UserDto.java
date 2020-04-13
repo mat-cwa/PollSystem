@@ -1,5 +1,6 @@
 package github.com.matcwa.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.Objects;
@@ -9,7 +10,7 @@ public class UserDto {
     private Long id;
     private String username;
     private String token;
-    @JsonManagedReference
+    @JsonBackReference
     private Set<PollDto> pollSet;
     @JsonManagedReference(value = "user-vote")
     private Set<VoteDto> votes;
@@ -76,8 +77,5 @@ public class UserDto {
                 Objects.equals(getVotes(), userDto.getVotes());
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getUsername(), getToken(), getPollSet(), getVotes());
-    }
+
 }

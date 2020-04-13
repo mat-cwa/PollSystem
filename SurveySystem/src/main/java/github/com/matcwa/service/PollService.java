@@ -50,11 +50,11 @@ public class PollService {
     }
 
     @Transactional
-    public ErrorHandling<NewPollDto, PollError> addNewPoll(NewPollDto newPollDto, String token) {
-        ErrorHandling<NewPollDto, PollError> pollDto = new ErrorHandling<>();
+    public ErrorHandling<PollDto, PollError> addNewPoll(NewPollDto newPollDto, String token) {
+        ErrorHandling<PollDto, PollError> pollDto = new ErrorHandling<>();
         if (tokenService.getRoleFromToken(token).equals(Role.USER.name()) || tokenService.getRoleFromToken(token).equals(Role.ADMIN.name())) {
             pollDto = validatePoll(newPollDto);
-            if (pollDto.getDto() != null) {
+            if (pollDto.getError() == null) {
                 Optional<User> userOptional = userRepository.findByUsername(tokenService.getUsernameFromToken(token));
                 if (userOptional.isPresent()) {
                     User user = userOptional.get();
@@ -62,6 +62,7 @@ public class PollService {
                     pollSource.setOwner(user);
                     user.addPoll(pollSource);
                     pollRepository.save(pollSource);
+                    pollDto.setDto(PollMapper.toDto(pollSource));
                 } else {
                     pollDto.setError(PollError.USER_NOT_FOUND);
                 }
@@ -85,10 +86,10 @@ public class PollService {
                         response.setDto(PollMapper.toDto(poll));
                     }
                 } else {
-                    response.setError(PollError.USER_NOT_FOUND);
+                    response.setError(PollError.AUTHORIZATION_ERROR);
                 }
             } else {
-                response.setError(PollError.AUTHORIZATION_ERROR);
+                response.setError(PollError.USER_NOT_FOUND);
             }
         }, () -> response.setError(PollError.POLL_NOT_FOUND_ERROR));
         return response;
@@ -111,12 +112,10 @@ public class PollService {
     }
 
 
-    private ErrorHandling<NewPollDto, PollError> validatePoll(NewPollDto newPollDto) {
-        ErrorHandling<NewPollDto, PollError> poll = new ErrorHandling<>();
+    private ErrorHandling<PollDto, PollError> validatePoll(NewPollDto newPollDto) {
+        ErrorHandling<PollDto, PollError> poll = new ErrorHandling<>();
         if (newPollDto.getName() == null || newPollDto.getName().isEmpty()) {
             poll.setError(PollError.WRONG_NAME_ERROR);
-        } else {
-            poll.setDto(newPollDto);
         }
         return poll;
     }

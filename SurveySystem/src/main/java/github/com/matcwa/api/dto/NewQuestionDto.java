@@ -1,26 +1,21 @@
 package github.com.matcwa.api.dto;
 
-import github.com.matcwa.api.dto.AnswerDto;
-import github.com.matcwa.api.dto.PollDto;
-
-import java.util.Set;
-
 public class NewQuestionDto {
 
-    private String questionDescription;
+    private String description;
 
     public NewQuestionDto() {
     }
 
-    public NewQuestionDto(String questionDescription) {
-        this.questionDescription = questionDescription;
+    public NewQuestionDto(String description) {
+        this.description = description;
     }
 
-    public String getQuestionDescription() {
-        return questionDescription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setQuestionDescription(String questionDescription) {
-        this.questionDescription = questionDescription;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

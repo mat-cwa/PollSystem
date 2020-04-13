@@ -95,7 +95,7 @@ class QuestionServiceTest {
         NewQuestionDto newQuestion=new NewQuestionDto("newQuestion");
         User user=new User("user","password");
         Poll poll=new Poll("anyName",user);
-        Question question=new Question(newQuestion.getQuestionDescription(),poll);
+        Question question=new Question(newQuestion.getDescription(),poll);
         given(pollRepository.findById(1L)).willReturn(Optional.of(poll));
         given(userRepository.findByUsername(tokenService.getUsernameFromToken("token"))).willReturn(Optional.of(user));
         ArgumentCaptor<Question> questionCaptor=ArgumentCaptor.forClass(Question.class);
@@ -163,7 +163,7 @@ class QuestionServiceTest {
         ErrorHandling<QuestionDto, QuestionError> response = questionService.updateQuestion(newQuestionDto,1L,"token");
         //then
         assertNull(response.getError());
-        assertEquals(response.getDto().getQuestionDescription(),newQuestionDto.getQuestionDescription());
+        assertEquals(response.getDto().getQuestionDescription(),newQuestionDto.getDescription());
     }
     @Test
     void shouldReturnUpdatedQuestionAndNullQuestionErrorWhenUserHasRoleAdmin() {
@@ -181,7 +181,7 @@ class QuestionServiceTest {
         ErrorHandling<QuestionDto, QuestionError> response = questionService.updateQuestion(newQuestionDto,1L,"token");
         //then
         assertNull(response.getError());
-        assertEquals(response.getDto().getQuestionDescription(),newQuestionDto.getQuestionDescription());
+        assertEquals(response.getDto().getQuestionDescription(),newQuestionDto.getDescription());
     }
 
     @Test

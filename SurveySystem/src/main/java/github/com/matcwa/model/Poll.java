@@ -6,12 +6,14 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
+@Table(name = "POLL", schema = "POLL")
 public class Poll {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @ManyToOne(cascade = {CascadeType.REMOVE,CascadeType.PERSIST})
+    @ManyToOne(cascade = {CascadeType.PERSIST})
+    @JoinColumn(name = "fk_user")
     private User owner;
     @OneToMany(cascade = {CascadeType.REMOVE,CascadeType.PERSIST}, mappedBy = "poll")
     private Set<Question> questions=new HashSet<>();
@@ -28,9 +30,8 @@ public class Poll {
         this.owner = owner;
     }
 
-    public Question addQuestion(Question question) {
+    public void addQuestion(Question question) {
         questions.add(question);
-        return question;
     }
 
     public Long getId() {
@@ -76,8 +77,5 @@ public class Poll {
                 Objects.equals(getQuestions(), poll.getQuestions());
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getName(), getOwner(), getQuestions());
-    }
+
 }

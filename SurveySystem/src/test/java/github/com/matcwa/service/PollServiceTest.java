@@ -64,14 +64,12 @@ class PollServiceTest {
         given(userRepository.findByUsername("admin")).willReturn(Optional.of(admin));
         ArgumentCaptor<Poll> pollCaptor=ArgumentCaptor.forClass(Poll.class);
         //when
-        ErrorHandling<NewPollDto, PollError> userTokenResponse = pollService.addNewPoll(userPollDto,"userToken");
-        ErrorHandling<NewPollDto, PollError> adminTokenResponse = pollService.addNewPoll(adminPollDto,"adminToken");
+        ErrorHandling<PollDto, PollError> userTokenResponse = pollService.addNewPoll(userPollDto,"userToken");
+        ErrorHandling<PollDto, PollError> adminTokenResponse = pollService.addNewPoll(adminPollDto,"adminToken");
         //then
         verify(pollRepository,times(2)).save(pollCaptor.capture());
         assertNull(userTokenResponse.getError());
-        assertEquals(userTokenResponse.getDto(), userPollDto);
         assertNull(adminTokenResponse.getError());
-        assertEquals(adminTokenResponse.getDto(), adminPollDto);
         assertTrue(pollCaptor.getAllValues().contains(userPoll));
         assertTrue(pollCaptor.getAllValues().contains(adminPoll));
     }
@@ -79,12 +77,14 @@ class PollServiceTest {
     @Test
     void shouldReturnNullPollDtoAndWrongNameError() {
         //given
+        User user=new User("user","password");
         NewPollDto emptyNameDTO = new NewPollDto("");
         NewPollDto nullNameDTO = new NewPollDto(null);
         given(tokenService.getRoleFromToken("token")).willReturn("USER");
+        given(userRepository.findByUsername(tokenService.getUsernameFromToken("token"))).willReturn(Optional.of(user));
         //when
-        ErrorHandling<NewPollDto, PollError> emptyName = pollService.addNewPoll(emptyNameDTO,"token");
-        ErrorHandling<NewPollDto, PollError> nullName = pollService.addNewPoll(nullNameDTO,"token");
+        ErrorHandling<PollDto, PollError> emptyName = pollService.addNewPoll(emptyNameDTO,"token");
+        ErrorHandling<PollDto, PollError> nullName = pollService.addNewPoll(nullNameDTO,"token");
         //then
         assertNull(emptyName.getDto());
         assertNull(nullName.getDto());
@@ -97,7 +97,7 @@ class PollServiceTest {
         NewPollDto newPollDto = new NewPollDto("");
         given(tokenService.getRoleFromToken("token")).willReturn("Wrong Role");
         //when
-        ErrorHandling<NewPollDto, PollError> emptyName = pollService.addNewPoll(newPollDto,"token");
+        ErrorHandling<PollDto, PollError> emptyName = pollService.addNewPoll(newPollDto,"token");
         //then
         assertNull(emptyName.getDto());
         assertEquals(emptyName.getError(), PollError.AUTHORIZATION_ERROR);

@@ -219,8 +219,9 @@ class AnswerServiceTest {
     void shouldReturnOneVotePerIpError() {
         //given
         HttpServletRequest httpServletRequest=mock(HttpServletRequest.class);
-        Answer answer=new Answer();
-        answer.setIpSet(prepareAccountData());
+        Question question=new Question("any?",null);
+        Answer answer=new Answer("anyAnswer",question);
+        answer.getQuestion().setIpSet(prepareAccountData());
         given(httpServletRequest.getRemoteAddr()).willReturn("123.456.789");
         given(answerRepository.findById(1L)).willReturn(Optional.of(answer));
         //when
@@ -233,8 +234,9 @@ class AnswerServiceTest {
     void shouldCreateNewVoteAndAddVoteToAnswer() {
         //given
         HttpServletRequest httpServletRequest=mock(HttpServletRequest.class);
-        Answer answer=new Answer();
-        answer.setIpSet(prepareAccountData());
+        Question question=new Question();
+        Answer answer=new Answer("anyAnswer",question);
+        answer.getQuestion().setIpSet(prepareAccountData());
         given(httpServletRequest.getRemoteAddr()).willReturn("987.654.321");
         given(answerRepository.findById(1L)).willReturn(Optional.of(answer));
         ArgumentCaptor<Vote> voteCaptor=ArgumentCaptor.forClass(Vote.class);

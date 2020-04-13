@@ -5,12 +5,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Table(name = "USER", schema = "POLL")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
     private String password;
+    @Enumerated(EnumType.STRING)
     private Role role;
     @OneToMany(mappedBy = "owner")
     private Set<Poll> pollSet=new HashSet<>();

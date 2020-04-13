@@ -27,7 +27,7 @@ public class PollController {
 
     @PostMapping("/newPoll")
     public ResponseEntity createNewPoll(@RequestBody NewPollDto newPollDto,@RequestHeader("Authorization") String token) {
-        ErrorHandling<NewPollDto, PollError> poll = pollService.addNewPoll(newPollDto,token);
+        ErrorHandling<PollDto, PollError> poll = pollService.addNewPoll(newPollDto,token);
         return ResponseResolver.resolve(poll);
     }
 

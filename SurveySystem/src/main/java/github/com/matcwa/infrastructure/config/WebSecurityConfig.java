@@ -13,15 +13,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .authorizeRequests().antMatchers("api/poll/**").hasRole("USER")
-                .and()
-                .addFilter(new JwtFilter(authenticationManager()));
+                .authorizeRequests().anyRequest().permitAll();
+//                .authorizeRequests().antMatchers("api/poll/**").hasAnyRole("USER","ADMIN")
+//                .and()
+//                .addFilter(new JwtFilter(authenticationManager()));
 
     }
-    @Override
-    public void configure(WebSecurity webSecurity) throws Exception {
-        webSecurity
-                .ignoring()
-                .antMatchers("/h2/**","/login");
-    }
+//    @Override
+//    public void configure(WebSecurity webSecurity) throws Exception {
+//        webSecurity
+//                .ignoring()
+//                .anyRequest();
+//    }
 }

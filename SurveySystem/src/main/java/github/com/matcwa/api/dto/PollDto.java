@@ -10,7 +10,7 @@ import java.util.Set;
 public class PollDto {
     private Long id;
     private String name;
-    @JsonBackReference
+    @JsonManagedReference
     private UserDto owner;
     @JsonManagedReference(value = "poll-question")
     private Set<QuestionDto> questions;
@@ -73,8 +73,4 @@ public class PollDto {
                 Objects.equals(getQuestions(), pollDto.getQuestions());
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getName(), getOwner(), getQuestions());
-    }
 }

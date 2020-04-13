@@ -5,24 +5,28 @@ import java.util.Date;
 import java.util.Objects;
 
 @Entity
+@Table(name = "VOTE", schema = "POLL")
 public class Vote {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
+    @JoinColumn(name = "fk_user")
     private User owner;
     @ManyToOne
+    @JoinColumn(name = "fk_answer")
     private Answer answer;
 
+    private Date date;
+
     public Vote() {
+        date = new Date();
     }
 
     public Vote(Answer answer) {
         this.answer = answer;
-        date=new Date();
+        date = new Date();
     }
-
-    private Date date = new Date();
 
     public Long getId() {
         return id;
@@ -48,6 +52,14 @@ public class Vote {
         this.answer = answer;
     }
 
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -59,8 +71,4 @@ public class Vote {
                 Objects.equals(date, vote.date);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getOwner(), getAnswer(), date);
-    }
 }

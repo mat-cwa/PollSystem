@@ -69,8 +69,4 @@ public class AnswerDto {
                 Objects.equals(getQuestion(), answerDto.getQuestion());
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getAnswerDescription(), getQuestion());
-    }
 }

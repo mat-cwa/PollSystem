@@ -9,7 +9,6 @@ import github.com.matcwa.api.error.QuestionError;
 import github.com.matcwa.api.jwt.TokenService;
 import github.com.matcwa.api.mapper.PollMapper;
 import github.com.matcwa.api.mapper.QuestionMapper;
-import github.com.matcwa.model.Poll;
 import github.com.matcwa.model.Question;
 import github.com.matcwa.model.Role;
 import github.com.matcwa.repository.PollRepository;
@@ -19,8 +18,6 @@ import github.com.matcwa.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -43,7 +40,7 @@ public class QuestionService {
         pollRepository.findById(pollId).ifPresentOrElse(poll -> {
             userRepository.findByUsername(tokenService.getUsernameFromToken(token)).ifPresentOrElse(user -> {
                 ErrorHandling<NewQuestionDto, QuestionError> newQuestion = validateNewQuestion(newQuestionDto);
-                if (poll.getOwner() == user) {
+                if (poll.getOwner() == user) { //todo add admin
                     if (newQuestion.getDto() != null) {
                         Question question = QuestionMapper.newToSource(newQuestionDto);
                         question.setPoll(poll);
@@ -82,8 +79,8 @@ public class QuestionService {
         questionRepository.findById(id).ifPresentOrElse(question -> {
             userRepository.findByUsername(tokenService.getUsernameFromToken(token)).ifPresentOrElse(user -> {
                 if (question.getPoll().getOwner() == user || tokenService.getRoleFromToken(token).equals(Role.ADMIN.name())) {
-                    if (newQuestionDto.getQuestionDescription() != null && !newQuestionDto.getQuestionDescription().isEmpty()) {
-                        question.setQuestionDescription(newQuestionDto.getQuestionDescription());
+                    if (newQuestionDto.getDescription() != null && !newQuestionDto.getDescription().isEmpty()) {
+                        question.setQuestionDescription(newQuestionDto.getDescription());
                         response.setDto(QuestionMapper.toDto(question));
                     } else {
                         response.setDto(QuestionMapper.toDto(question));
@@ -100,7 +97,7 @@ public class QuestionService {
     private ErrorHandling<NewQuestionDto, QuestionError> validateNewQuestion(NewQuestionDto newQuestionDto) {
         ErrorHandling<NewQuestionDto, QuestionError> question = new ErrorHandling<>();
 
-        if (newQuestionDto.getQuestionDescription() == null || newQuestionDto.getQuestionDescription().isEmpty()) {
+        if (newQuestionDto.getDescription() == null || newQuestionDto.getDescription().isEmpty()) {
             question.setError(QuestionError.EMPTY_CONTENT_ERROR);
         } else {
             question.setDto(newQuestionDto);

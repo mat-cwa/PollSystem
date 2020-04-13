@@ -66,8 +66,4 @@ public class QuestionDto {
                 Objects.equals(getPoll(), that.getPoll());
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getQuestionDescription());
-    }
 }
