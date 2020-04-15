@@ -6,15 +6,13 @@ import github.com.matcwa.api.error.ErrorHandling;
 import github.com.matcwa.infrastructure.ResponseResolver;
 import github.com.matcwa.service.AnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/pollsystem")
 public class AnswerController {
     private AnswerService answerService;
     @Autowired
@@ -36,7 +34,7 @@ public class AnswerController {
 
     @DeleteMapping("answer/{id}")
     public ResponseEntity deletePollById(@PathVariable Long id,@RequestHeader("Authorization") String token) {
-        ErrorHandling<DeleteSuccessResponseDto, AnswerError> response = answerService.deleteAnswer(id, token);
+        ErrorHandling<SuccessResponseDto, AnswerError> response = answerService.deleteAnswer(id, token);
         return ResponseResolver.resolve(response);
     }
     @PostMapping("/answer/{answerId}/addVote")

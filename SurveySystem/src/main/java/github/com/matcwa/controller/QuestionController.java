@@ -1,6 +1,6 @@
 package github.com.matcwa.controller;
 
-import github.com.matcwa.api.dto.DeleteSuccessResponseDto;
+import github.com.matcwa.api.dto.SuccessResponseDto;
 import github.com.matcwa.api.dto.NewQuestionDto;
 import github.com.matcwa.api.dto.PollDto;
 import github.com.matcwa.api.dto.QuestionDto;
@@ -9,12 +9,11 @@ import github.com.matcwa.api.error.QuestionError;
 import github.com.matcwa.infrastructure.ResponseResolver;
 import github.com.matcwa.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/pollsystem")
 public class QuestionController {
     private QuestionService questionService;
 
@@ -38,7 +37,7 @@ public class QuestionController {
 
     @DeleteMapping("question/{id}")
     public ResponseEntity deletePollById(@PathVariable Long id,@RequestHeader("Authorization") String token) {
-        ErrorHandling<DeleteSuccessResponseDto, QuestionError> response = questionService.deleteQuestion(id, token);
+        ErrorHandling<SuccessResponseDto, QuestionError> response = questionService.deleteQuestion(id, token);
         return ResponseResolver.resolve(response);
     }
 }

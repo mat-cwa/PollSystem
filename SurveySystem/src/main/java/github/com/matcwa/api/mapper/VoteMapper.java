@@ -4,7 +4,7 @@ import github.com.matcwa.api.dto.AnswerDto;
 import github.com.matcwa.api.dto.NewVoteDto;
 import github.com.matcwa.api.dto.UserDto;
 import github.com.matcwa.api.dto.VoteDto;
-import github.com.matcwa.model.Vote;
+import github.com.matcwa.model.entity.Vote;
 import org.modelmapper.ModelMapper;
 
 public class VoteMapper {

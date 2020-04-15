@@ -1,6 +1,6 @@
 package github.com.matcwa.controller;
 
-import github.com.matcwa.api.dto.DeleteSuccessResponseDto;
+import github.com.matcwa.api.dto.SuccessResponseDto;
 import github.com.matcwa.api.dto.NewPollDto;
 import github.com.matcwa.api.error.*;
 import github.com.matcwa.infrastructure.ResponseResolver;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/pollsystem")
 public class PollController {
     private PollService pollService;
 
@@ -37,7 +37,7 @@ public class PollController {
         return ResponseResolver.resolve(response);
     }
 
-    @GetMapping("/all")
+    @GetMapping("poll/all")
     public List<PollDto> getAll() {
         return pollService.getAll();
     }
@@ -52,7 +52,7 @@ public class PollController {
 
     @DeleteMapping("poll/{id}")
     public ResponseEntity deletePollById(@PathVariable Long id,@RequestHeader("Authorization") String token) {
-        ErrorHandling<DeleteSuccessResponseDto, PollError> response = pollService.deletePoll(id, token);
+        ErrorHandling<SuccessResponseDto, PollError> response = pollService.deletePoll(id, token);
         return ResponseResolver.resolve(response);
     }
 }

@@ -5,43 +5,62 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SurveySystem.iml" beforeDir="false" afterPath="$PROJECT_DIR$/SurveySystem.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/dto/AnswerDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/dto/AnswerDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/dto/NewQuestionDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/dto/NewQuestionDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/dto/PollDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/dto/PollDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/dto/QuestionDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/dto/QuestionDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/dto/DeleteSuccessResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/dto/SuccessResponseDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/dto/NewPollDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/dto/NewPollDto.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/dto/UserDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/dto/UserDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/dto/UserRegistrationDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/error/AnswerError.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/error/AnswerError.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/error/UserError.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/error/UserError.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/mapper/AnswerMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/mapper/AnswerMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/mapper/PollMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/mapper/PollMapper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/mapper/QuestionMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/mapper/QuestionMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/mapper/UserMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/mapper/UserMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/mapper/VoteMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/mapper/VoteMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/controller/AnswerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/controller/AnswerController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/controller/PollController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/controller/PollController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/controller/QuestionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/controller/QuestionController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/infrastructure/config/WebSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/infrastructure/config/WebSecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/model/Answer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/model/Answer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/model/Poll.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/model/Poll.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/model/Question.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/model/Question.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/model/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/model/Vote.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/model/Vote.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/repository/DbRunner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/repository/DbRunner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/model/Answer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/model/entity/Answer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/model/Poll.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/model/entity/Poll.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/model/Question.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/model/entity/Question.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/model/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/model/Vote.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/model/entity/Vote.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/repository/AnswerRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/repository/AnswerRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/repository/PollRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/repository/PollRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/repository/QuestionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/repository/QuestionRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/repository/VoteRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/repository/VoteRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/service/AnswerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/service/AnswerService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/service/PollService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/service/PollService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/service/QuestionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/service/QuestionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/service/UserService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/schema.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/github/com/matcwa/service/AnswerServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/github/com/matcwa/service/AnswerServiceTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/github/com/matcwa/service/PollServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/github/com/matcwa/service/PollServiceTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/github/com/matcwa/service/QuestionServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/github/com/matcwa/service/QuestionServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/github/com/matcwa/service/UserServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/github/com/matcwa/service/UserServiceTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/api/dto/AnswerDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/api/dto/AnswerDto.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/api/dto/NewQuestionDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/api/dto/NewQuestionDto.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/api/dto/PollDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/api/dto/PollDto.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/api/dto/QuestionDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/api/dto/QuestionDto.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/api/dto/UserDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/api/dto/UserDto.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/api/error/UserError.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/api/error/UserError.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/api/mapper/AnswerMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/api/mapper/AnswerMapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/api/mapper/PollMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/api/mapper/PollMapper.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/api/mapper/QuestionMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/api/mapper/QuestionMapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/api/mapper/UserMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/api/mapper/UserMapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/api/mapper/VoteMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/api/mapper/VoteMapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/controller/AnswerController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/controller/AnswerController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/controller/PollController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/controller/PollController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/infrastructure/config/WebSecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/infrastructure/config/WebSecurityConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/model/Answer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/model/Answer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/model/Poll.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/model/Poll.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/model/Question.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/model/Question.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/model/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/model/User.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/model/Vote.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/model/Vote.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/repository/DbRunner.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/repository/DbRunner.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/controller/QuestionController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/controller/QuestionController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/model/Answer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/model/Poll.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/model/Question.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/model/User.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/model/Vote.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/repository/AnswerRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/repository/AnswerRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/repository/DbRunner.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/repository/PollRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/repository/PollRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/repository/QuestionRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/repository/QuestionRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/repository/VoteRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/repository/VoteRepository.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/service/AnswerService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/service/AnswerService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/service/PollService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/service/PollService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/service/QuestionService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/service/QuestionService.class" afterDir="false" />
@@ -57,6 +76,7 @@
       <list>
         <option value="Enum" />
         <option value="JUnit5 Test Class" />
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -111,7 +131,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.SurveySystemApplication">
+  <component name="RunManager" selected="JUnit.AnswerServiceTest.shouldReturnOneVotePerIpError">
     <configuration name="SurveySystemApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="github.com.matcwa.SurveySystemApplication" />
       <module name="SurveySystem" />
@@ -140,6 +160,22 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="AnswerServiceTest.shouldCreateNewVoteAndAddVoteToAnswer" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="SurveySystem" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="github.com.matcwa.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="github.com.matcwa.service" />
+      <option name="MAIN_CLASS_NAME" value="github.com.matcwa.service.AnswerServiceTest" />
+      <option name="METHOD_NAME" value="shouldCreateNewVoteAndAddVoteToAnswer" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="AnswerServiceTest.shouldReturnOneVotePerIpError" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="SurveySystem" />
       <extension name="coverage">
@@ -156,7 +192,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="PollServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="UserServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="SurveySystem" />
       <extension name="coverage">
         <pattern>
@@ -165,35 +201,19 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="github.com.matcwa.service" />
-      <option name="MAIN_CLASS_NAME" value="github.com.matcwa.service.PollServiceTest" />
+      <option name="MAIN_CLASS_NAME" value="github.com.matcwa.service.UserServiceTest" />
       <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="PollServiceTest.shouldReturnNullPollDtoAndWrongNameError" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="SurveySystem" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="github.com.matcwa.service.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="github.com.matcwa.service" />
-      <option name="MAIN_CLASS_NAME" value="github.com.matcwa.service.PollServiceTest" />
-      <option name="METHOD_NAME" value="shouldReturnNullPollDtoAndWrongNameError" />
-      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.SurveySystemApplication" />
-        <item itemvalue="JUnit.AnswerServiceTest" />
         <item itemvalue="JUnit.AnswerServiceTest.shouldReturnOneVotePerIpError" />
-        <item itemvalue="JUnit.PollServiceTest" />
-        <item itemvalue="JUnit.PollServiceTest.shouldReturnNullPollDtoAndWrongNameError" />
+        <item itemvalue="JUnit.AnswerServiceTest.shouldCreateNewVoteAndAddVoteToAnswer" />
+        <item itemvalue="JUnit.AnswerServiceTest" />
+        <item itemvalue="Application.SurveySystemApplication" />
+        <item itemvalue="JUnit.UserServiceTest" />
       </list>
     </recent_temporary>
   </component>
@@ -225,16 +245,5 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/test/java/github/com/matcwa/service/PollServiceTest.java</url>
-          <line>90</line>
-          <option name="timeStamp" value="40" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

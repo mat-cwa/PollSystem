@@ -1,14 +1,14 @@
 package github.com.matcwa.service;
 
-import github.com.matcwa.api.dto.DeleteSuccessResponseDto;
+import github.com.matcwa.api.dto.SuccessResponseDto;
 import github.com.matcwa.api.dto.NewPollDto;
 import github.com.matcwa.api.dto.PollDto;
 import github.com.matcwa.api.error.*;
 import github.com.matcwa.api.jwt.TokenService;
 import github.com.matcwa.api.mapper.PollMapper;
-import github.com.matcwa.model.Poll;
+import github.com.matcwa.model.entity.Poll;
 import github.com.matcwa.model.Role;
-import github.com.matcwa.model.User;
+import github.com.matcwa.model.entity.User;
 import github.com.matcwa.repository.PollRepository;
 import github.com.matcwa.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,22 +31,6 @@ public class PollService {
         this.pollRepository = pollRepository;
         this.userRepository = userRepository;
         this.tokenService = tokenService;
-    }
-
-
-    public List<PollDto> getAll() {
-        List<Poll> all = pollRepository.findAll();
-        return all.stream().map(PollMapper::toDto).collect(Collectors.toList());
-    }
-
-
-    public ErrorHandling<PollDto, PollError> getPollById(Long id) {
-        ErrorHandling<PollDto, PollError> response = new ErrorHandling<>();
-        pollRepository.findById(id).ifPresentOrElse(poll -> {
-            PollDto pollDto = PollMapper.toDto(poll);
-            response.setDto(pollDto);
-        }, () -> response.setError(PollError.POLL_NOT_FOUND_ERROR));
-        return response;
     }
 
     @Transactional
@@ -73,6 +57,23 @@ public class PollService {
         return pollDto;
     }
 
+
+    public List<PollDto> getAll() {
+        List<Poll> all = pollRepository.findAll();
+        return all.stream().map(PollMapper::toDto).collect(Collectors.toList());
+    }
+
+
+    public ErrorHandling<PollDto, PollError> getPollById(Long id) {
+        ErrorHandling<PollDto, PollError> response = new ErrorHandling<>();
+        pollRepository.findById(id).ifPresentOrElse(poll -> {
+            PollDto pollDto = PollMapper.toDto(poll);
+            response.setDto(pollDto);
+        }, () -> response.setError(PollError.POLL_NOT_FOUND_ERROR));
+        return response;
+    }
+
+
     public ErrorHandling<PollDto, PollError> updatePoll(NewPollDto newPollDto, Long id, String token) {
         ErrorHandling<PollDto, PollError> response = new ErrorHandling<>();
         pollRepository.findById(id).ifPresentOrElse(poll -> {
@@ -96,13 +97,13 @@ public class PollService {
     }
 
 
-    public ErrorHandling<DeleteSuccessResponseDto, PollError> deletePoll(Long id, String token) {
-        ErrorHandling<DeleteSuccessResponseDto, PollError> response = new ErrorHandling<>();
+    public ErrorHandling<SuccessResponseDto, PollError> deletePoll(Long id, String token) {
+        ErrorHandling<SuccessResponseDto, PollError> response = new ErrorHandling<>();
         pollRepository.findById(id).ifPresentOrElse(poll -> {
             userRepository.findByUsername(tokenService.getUsernameFromToken(token)).ifPresentOrElse(user -> {
                 if (poll.getOwner() == user || tokenService.getRoleFromToken(token).equals("ADMIN")) {
                     pollRepository.deleteById(id);
-                    response.setDto(new DeleteSuccessResponseDto("Successful!"));
+                    response.setDto(new SuccessResponseDto("Successful!"));
                 } else {
                     response.setError(PollError.AUTHORIZATION_ERROR);
                 }

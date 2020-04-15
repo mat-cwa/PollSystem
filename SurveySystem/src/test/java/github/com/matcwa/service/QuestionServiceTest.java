@@ -1,16 +1,16 @@
 package github.com.matcwa.service;
 
-import github.com.matcwa.api.dto.DeleteSuccessResponseDto;
+import github.com.matcwa.api.dto.SuccessResponseDto;
 import github.com.matcwa.api.dto.NewQuestionDto;
 import github.com.matcwa.api.dto.PollDto;
 import github.com.matcwa.api.dto.QuestionDto;
 import github.com.matcwa.api.error.ErrorHandling;
 import github.com.matcwa.api.error.QuestionError;
 import github.com.matcwa.api.jwt.TokenService;
-import github.com.matcwa.model.Poll;
-import github.com.matcwa.model.Question;
+import github.com.matcwa.model.entity.Poll;
+import github.com.matcwa.model.entity.Question;
 import github.com.matcwa.model.Role;
-import github.com.matcwa.model.User;
+import github.com.matcwa.model.entity.User;
 import github.com.matcwa.repository.PollRepository;
 import github.com.matcwa.repository.QuestionRepository;
 import github.com.matcwa.repository.UserRepository;
@@ -43,6 +43,47 @@ class QuestionServiceTest {
 
     @BeforeEach
     void setUp() { MockitoAnnotations.initMocks(this); }
+
+    @Test
+    void shouldCreateNewQuestionAndReturnNullErrorWhenUserIsPollsOwner() {
+        //given
+        NewQuestionDto newQuestion=new NewQuestionDto("newQuestion");
+        User user=new User("user","password");
+        Poll poll=new Poll("anyName",user);
+        Question question=new Question(newQuestion.getDescription(),poll);
+        given(pollRepository.findById(1L)).willReturn(Optional.of(poll));
+        given(userRepository.findByUsername(tokenService.getUsernameFromToken("token"))).willReturn(Optional.of(user));
+        ArgumentCaptor<Question> questionCaptor=ArgumentCaptor.forClass(Question.class);
+        //when
+        ErrorHandling<PollDto, QuestionError> newQuestionResponse = questionService.createNewQuestion(newQuestion,1L,"token");
+        //then
+        verify(questionRepository,times(1)).save(questionCaptor.capture());
+        assertNull(newQuestionResponse.getError());
+        assertEquals(newQuestionResponse.getDto().getQuestions().size(),1);
+        assertEquals(question,questionCaptor.getValue());
+        assertEquals(poll,questionCaptor.getValue().getPoll());
+    }
+    @Test
+    void shouldCreateNewQuestionAndReturnNullErrorWhenUserHasRoleAdmin() {
+        //given
+        NewQuestionDto newQuestion=new NewQuestionDto("newQuestion");
+        User user=new User("user","password");
+        User owner=new User();
+        Poll poll=new Poll("anyName",owner);
+        Question question=new Question(newQuestion.getDescription(),poll);
+        given(pollRepository.findById(1L)).willReturn(Optional.of(poll));
+        given(userRepository.findByUsername(tokenService.getUsernameFromToken("token"))).willReturn(Optional.of(user));
+        given(tokenService.getRoleFromToken("token")).willReturn(Role.ADMIN.name());
+        ArgumentCaptor<Question> questionCaptor=ArgumentCaptor.forClass(Question.class);
+        //when
+        ErrorHandling<PollDto, QuestionError> newQuestionResponse = questionService.createNewQuestion(newQuestion,1L,"token");
+        //then
+        verify(questionRepository,times(1)).save(questionCaptor.capture());
+        assertNull(newQuestionResponse.getError());
+        assertEquals(newQuestionResponse.getDto().getQuestions().size(),1);
+        assertEquals(question,questionCaptor.getValue());
+        assertEquals(poll,questionCaptor.getValue().getPoll());
+    }
 
     @Test
     void shouldReturnPollNotFoundErrorAndNullQuestionDTO() {
@@ -88,67 +129,6 @@ class QuestionServiceTest {
         assertEquals(nullContentResponse.getError(),QuestionError.EMPTY_CONTENT_ERROR);
     }
 
-
-    @Test
-    void shouldCreateNewQuestionAndReturnNullError() {
-        //given
-        NewQuestionDto newQuestion=new NewQuestionDto("newQuestion");
-        User user=new User("user","password");
-        Poll poll=new Poll("anyName",user);
-        Question question=new Question(newQuestion.getDescription(),poll);
-        given(pollRepository.findById(1L)).willReturn(Optional.of(poll));
-        given(userRepository.findByUsername(tokenService.getUsernameFromToken("token"))).willReturn(Optional.of(user));
-        ArgumentCaptor<Question> questionCaptor=ArgumentCaptor.forClass(Question.class);
-        //when
-        ErrorHandling<PollDto, QuestionError> newQuestionResponse = questionService.createNewQuestion(newQuestion,1L,"token");
-        //then
-        verify(questionRepository,times(1)).save(questionCaptor.capture());
-        assertNull(newQuestionResponse.getError());
-        assertEquals(newQuestionResponse.getDto().getQuestions().size(),1);
-        assertEquals(question,questionCaptor.getValue());
-        assertEquals(poll,questionCaptor.getValue().getPoll());
-    }
-
-    @Test
-    void shouldReturnQuestionNotFoundError() {
-        //given
-        given(questionRepository.findById(1L)).willReturn(Optional.empty());
-        NewQuestionDto newQuestionDto=new NewQuestionDto("anyName");
-        //when
-        ErrorHandling<QuestionDto, QuestionError> questionUpdateResponse = questionService.updateQuestion(newQuestionDto,1L,"token");
-        //then
-        assertNull(questionUpdateResponse.getDto());
-        assertEquals(questionUpdateResponse.getError(),QuestionError.QUESTION_NOT_FOUND_ERROR);
-    }
-    @Test
-    void shouldReturnUserNotFoundError() {
-        //given
-        NewQuestionDto newQuestionDto=new NewQuestionDto("anyName");
-        given(questionRepository.findById(1L)).willReturn(Optional.of(new Question()));
-        given(userRepository.findByUsername(tokenService.getUsernameFromToken("token"))).willReturn(Optional.empty());
-        //when
-        ErrorHandling<QuestionDto, QuestionError> questionUpdateResponse = questionService.updateQuestion(newQuestionDto,1L,"token");
-        //then
-        assertNull(questionUpdateResponse.getDto());
-        assertEquals(questionUpdateResponse.getError(),QuestionError.USER_NOT_FOUND_ERROR);
-    }
-    @Test
-    void shouldReturnAuthorizationError() {
-        //given
-        User user=new User();
-        User user2=new User();
-        Poll poll=new Poll("anyName",user2);
-        Question question=new Question("any",poll);
-        NewQuestionDto newQuestionDto=new NewQuestionDto("anyName");
-        given(questionRepository.findById(1L)).willReturn(Optional.of(question));
-        given(userRepository.findByUsername(tokenService.getUsernameFromToken("token"))).willReturn(Optional.of(user));
-        given(tokenService.getRoleFromToken("token")).willReturn(Role.USER.name());
-        //when
-        ErrorHandling<QuestionDto, QuestionError> questionUpdateResponse = questionService.updateQuestion(newQuestionDto,1L,"token");
-        //then
-        assertNull(questionUpdateResponse.getDto());
-        assertEquals(questionUpdateResponse.getError(),QuestionError.AUTHORIZATION_ERROR);
-    }
     @Test
     void shouldReturnUpdatedQuestionAndNullQuestionErrorWhenUserIsPollsOwner() {
         //given
@@ -205,12 +185,54 @@ class QuestionServiceTest {
         assertNull(nullNameResponse.getError());
         assertEquals(nullNameResponse.getDto().getQuestionDescription(),question.getQuestionDescription());
     }
+
+    @Test
+    void shouldReturnQuestionNotFoundError() {
+        //given
+        given(questionRepository.findById(1L)).willReturn(Optional.empty());
+        NewQuestionDto newQuestionDto=new NewQuestionDto("anyName");
+        //when
+        ErrorHandling<QuestionDto, QuestionError> questionUpdateResponse = questionService.updateQuestion(newQuestionDto,1L,"token");
+        //then
+        assertNull(questionUpdateResponse.getDto());
+        assertEquals(questionUpdateResponse.getError(),QuestionError.QUESTION_NOT_FOUND_ERROR);
+    }
+    @Test
+    void shouldReturnUserNotFoundError() {
+        //given
+        NewQuestionDto newQuestionDto=new NewQuestionDto("anyName");
+        given(questionRepository.findById(1L)).willReturn(Optional.of(new Question()));
+        given(userRepository.findByUsername(tokenService.getUsernameFromToken("token"))).willReturn(Optional.empty());
+        //when
+        ErrorHandling<QuestionDto, QuestionError> questionUpdateResponse = questionService.updateQuestion(newQuestionDto,1L,"token");
+        //then
+        assertNull(questionUpdateResponse.getDto());
+        assertEquals(questionUpdateResponse.getError(),QuestionError.USER_NOT_FOUND_ERROR);
+    }
+    @Test
+    void shouldReturnAuthorizationError() {
+        //given
+        User user=new User();
+        User user2=new User();
+        Poll poll=new Poll("anyName",user2);
+        Question question=new Question("any",poll);
+        NewQuestionDto newQuestionDto=new NewQuestionDto("anyName");
+        given(questionRepository.findById(1L)).willReturn(Optional.of(question));
+        given(userRepository.findByUsername(tokenService.getUsernameFromToken("token"))).willReturn(Optional.of(user));
+        given(tokenService.getRoleFromToken("token")).willReturn(Role.USER.name());
+        //when
+        ErrorHandling<QuestionDto, QuestionError> questionUpdateResponse = questionService.updateQuestion(newQuestionDto,1L,"token");
+        //then
+        assertNull(questionUpdateResponse.getDto());
+        assertEquals(questionUpdateResponse.getError(),QuestionError.AUTHORIZATION_ERROR);
+    }
+
     @Test
     void shouldReturnQuestionNotFoundErrorAndNullDeleteQuestionDto() {
         //given
         given(questionRepository.findById(1L)).willReturn(Optional.empty());
         //when
-        ErrorHandling<DeleteSuccessResponseDto, QuestionError> response = questionService.deleteQuestion(1L, "token");
+        ErrorHandling<SuccessResponseDto, QuestionError> response = questionService.deleteQuestion(1L, "token");
         //then
         assertEquals(response.getError(),QuestionError.QUESTION_NOT_FOUND_ERROR);
         assertNull(response.getDto());
@@ -222,7 +244,7 @@ class QuestionServiceTest {
         given(questionRepository.findById(1L)).willReturn(Optional.of(question));
         given(userRepository.findByUsername(tokenService.getUsernameFromToken("token"))).willReturn(Optional.empty());
         //when
-        ErrorHandling<DeleteSuccessResponseDto, QuestionError> response = questionService.deleteQuestion(1L, "token");
+        ErrorHandling<SuccessResponseDto, QuestionError> response = questionService.deleteQuestion(1L, "token");
         //then
         assertEquals(response.getError(),QuestionError.USER_NOT_FOUND_ERROR);
         assertNull(response.getDto());
@@ -238,7 +260,7 @@ class QuestionServiceTest {
         given(questionRepository.findById(1L)).willReturn(Optional.of(question));
         given(userRepository.findByUsername(tokenService.getUsernameFromToken("token"))).willReturn(Optional.of(user));
         //when
-        ErrorHandling<DeleteSuccessResponseDto, QuestionError> response = questionService.deleteQuestion(1L, "token");
+        ErrorHandling<SuccessResponseDto, QuestionError> response = questionService.deleteQuestion(1L, "token");
         //then
         assertEquals(response.getError(),QuestionError.AUTHORIZATION_ERROR);
         assertNull(response.getDto());
@@ -252,7 +274,7 @@ class QuestionServiceTest {
         given(questionRepository.findById(1L)).willReturn(Optional.of(question));
         given(userRepository.findByUsername(tokenService.getUsernameFromToken("token"))).willReturn(Optional.of(user));
         //when
-        ErrorHandling<DeleteSuccessResponseDto, QuestionError> response = questionService.deleteQuestion(1L, "token");
+        ErrorHandling<SuccessResponseDto, QuestionError> response = questionService.deleteQuestion(1L, "token");
         //then
         assertEquals(response.getDto().getResponse(),"Successful!");
         assertNull(response.getError());
@@ -268,7 +290,7 @@ class QuestionServiceTest {
         given(questionRepository.findById(1L)).willReturn(Optional.of(question));
         given(userRepository.findByUsername(tokenService.getUsernameFromToken("token"))).willReturn(Optional.of(user));
         //when
-        ErrorHandling<DeleteSuccessResponseDto, QuestionError> response = questionService.deleteQuestion(1L, "token");
+        ErrorHandling<SuccessResponseDto, QuestionError> response = questionService.deleteQuestion(1L, "token");
         //then
         assertEquals(response.getDto().getResponse(),"Successful!");
         assertNull(response.getError());

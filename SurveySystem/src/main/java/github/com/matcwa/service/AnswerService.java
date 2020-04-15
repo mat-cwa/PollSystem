@@ -6,10 +6,10 @@ import github.com.matcwa.api.error.ErrorHandling;
 import github.com.matcwa.api.jwt.TokenService;
 import github.com.matcwa.api.mapper.AnswerMapper;
 import github.com.matcwa.api.mapper.QuestionMapper;
-import github.com.matcwa.api.mapper.VoteMapper;
-import github.com.matcwa.model.Answer;
+import github.com.matcwa.model.entity.Answer;
 import github.com.matcwa.model.Role;
-import github.com.matcwa.model.Vote;
+import github.com.matcwa.model.entity.Question;
+import github.com.matcwa.model.entity.Vote;
 import github.com.matcwa.repository.AnswerRepository;
 import github.com.matcwa.repository.QuestionRepository;
 import github.com.matcwa.repository.UserRepository;
@@ -38,12 +38,13 @@ public class AnswerService {
         this.tokenService = tokenService;
     }
 
+    @Transactional
     public ErrorHandling<QuestionDto, AnswerError> createNewAnswer(NewAnswerDto newAnswerDto, Long id, String token) {
         ErrorHandling<QuestionDto, AnswerError> response = new ErrorHandling<>();
         questionRepository.findById(id).ifPresentOrElse(question -> {
             userRepository.findByUsername(tokenService.getUsernameFromToken(token)).ifPresentOrElse(user -> {
                 ErrorHandling<NewAnswerDto, AnswerError> newAnswer = validateNewAnswer(newAnswerDto);
-                if (question.getPoll().getOwner() == user) { //todo admin
+                if (question.getPoll().getOwner() == user || tokenService.getRoleFromToken(token).equals("ADMIN")) {
                     if (newAnswer.getDto() != null) {
                         Answer answer = AnswerMapper.newToSource(newAnswerDto);
                         answer.setQuestion(question);
@@ -61,22 +62,7 @@ public class AnswerService {
         return response;
     }
 
-    public ErrorHandling<AnswerDto, AnswerError> addVoteToAnswer(Long id, HttpServletRequest httpServletRequest) {
-        String remoteAddr = httpServletRequest.getRemoteAddr();
-        ErrorHandling<AnswerDto, AnswerError> response = new ErrorHandling<>();
-        answerRepository.findById(id).ifPresentOrElse(answer -> {
-            if (!isVoteForThisIpAddressAlreadyAdded(remoteAddr, answer)) {
-                Vote vote = new Vote();
-                vote.setAnswer(answer);
-                voteRepository.save(vote);
-                answer.addVote(vote, remoteAddr);
-                response.setDto(AnswerMapper.toDto(answer));
-            } else response.setError(AnswerError.ONE_VOTE_PER_IP_ERROR);
-        }, () -> response.setError(AnswerError.ANSWER_NOT_FOUND_ERROR));
-        return response;
-    }
-
-
+    @Transactional
     public ErrorHandling<AnswerDto, AnswerError> updateAnswer(NewAnswerDto newAnswerDto, long id, String token) {
         ErrorHandling<AnswerDto, AnswerError> response = new ErrorHandling<>();
         answerRepository.findById(id).ifPresentOrElse(answer -> {
@@ -96,13 +82,13 @@ public class AnswerService {
         return response;
     }
 
-    public ErrorHandling<DeleteSuccessResponseDto, AnswerError> deleteAnswer(Long id, String token) {
-        ErrorHandling<DeleteSuccessResponseDto, AnswerError> response = new ErrorHandling<>();
+    public ErrorHandling<SuccessResponseDto, AnswerError> deleteAnswer(Long id, String token) {
+        ErrorHandling<SuccessResponseDto, AnswerError> response = new ErrorHandling<>();
         answerRepository.findById(id).ifPresentOrElse(answer -> {
             userRepository.findByUsername(tokenService.getUsernameFromToken(token)).ifPresentOrElse(user -> {
                 if (answer.getQuestion().getPoll().getOwner() == user || tokenService.getRoleFromToken(token).equals("ADMIN")) {
                     answerRepository.deleteById(id);
-                    response.setDto(new DeleteSuccessResponseDto("Successful!"));
+                    response.setDto(new SuccessResponseDto("Successful!"));
                 } else {
                     response.setError(AnswerError.AUTHORIZATION_ERROR);
                 }
@@ -111,8 +97,41 @@ public class AnswerService {
         return response;
     }
 
+    @Transactional
+    public ErrorHandling<AnswerDto, AnswerError> addVoteToAnswer(Long id, HttpServletRequest httpServletRequest) {
+        String remoteAddr = httpServletRequest.getRemoteAddr();
+        ErrorHandling<AnswerDto, AnswerError> response = new ErrorHandling<>();
+        answerRepository.findById(id).ifPresentOrElse(answer -> {
+            if (answer.getQuestion().getPoll().isManyVotePerQuestion()) {
+                if (!isVoteForThisIpAddressAlreadyAdded(remoteAddr, answer)) {
+                    Vote vote = new Vote();
+                    vote.setAnswer(answer);
+                    voteRepository.save(vote);
+                    answer.addVote(vote);
+                    answer.addIpAddress(remoteAddr);
+                    response.setDto(AnswerMapper.toDto(answer));
+                } else {
+                    response.setError(AnswerError.ONE_VOTE_PER_IP_ANSWER);
+                }
+            } else if (!isVoteForThisIpAddressAlreadyAdded(remoteAddr, answer.getQuestion())) {
+                Vote vote = new Vote();
+                vote.setAnswer(answer);
+                voteRepository.save(vote);
+                answer.addVote(vote);
+                answer.getQuestion().addIpAddress(remoteAddr);
+                response.setDto(AnswerMapper.toDto(answer));
+            } else response.setError(AnswerError.ONE_VOTE_PER_QUESTION);
+        }, () -> response.setError(AnswerError.ANSWER_NOT_FOUND_ERROR));
+        return response;
+    }
+
+
+    private boolean isVoteForThisIpAddressAlreadyAdded(String ipAddress, Question question) {
+        return question.getIpSet().contains(ipAddress);
+    }
+
     private boolean isVoteForThisIpAddressAlreadyAdded(String ipAddress, Answer answer) {
-        return answer.getQuestion().getIpSet().contains(ipAddress);
+        return answer.getIpSet().contains(ipAddress);
     }
 
     private ErrorHandling<NewAnswerDto, AnswerError> validateNewAnswer(NewAnswerDto newAnswerDto) {

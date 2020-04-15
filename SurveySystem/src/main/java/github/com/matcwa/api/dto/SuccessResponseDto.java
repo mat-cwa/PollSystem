@@ -1,12 +1,12 @@
 package github.com.matcwa.api.dto;
 
-public class DeleteSuccessResponseDto {
+public class SuccessResponseDto {
     private String response;
 
-    public DeleteSuccessResponseDto() {
+    public SuccessResponseDto() {
     }
 
-    public DeleteSuccessResponseDto(String response) {
+    public SuccessResponseDto(String response) {
         this.response = response;
     }
 

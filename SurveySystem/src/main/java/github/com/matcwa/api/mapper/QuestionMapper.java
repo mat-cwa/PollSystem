@@ -2,7 +2,7 @@ package github.com.matcwa.api.mapper;
 
 import github.com.matcwa.api.dto.NewQuestionDto;
 import github.com.matcwa.api.dto.QuestionDto;
-import github.com.matcwa.model.Question;
+import github.com.matcwa.model.entity.Question;
 import org.modelmapper.ModelMapper;
 
 public class QuestionMapper {

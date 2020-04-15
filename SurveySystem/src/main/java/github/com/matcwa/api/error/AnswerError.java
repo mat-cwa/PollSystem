@@ -8,6 +8,8 @@ public enum  AnswerError implements ResponseError {
     ANSWER_NOT_FOUND_ERROR("Answer not exist", 404),
     USER_NOT_FOUND_ERROR("USER TAKEN FROM TOKEN DOESNT EXIST",404),
     ONE_VOTE_PER_IP_ERROR("One vote per IP allowed", 400),
+    ONE_VOTE_PER_IP_ANSWER("You have already voted for this answer",400),
+    ONE_VOTE_PER_QUESTION("You have already voted for this question",400),
     AUTHORIZATION_ERROR(" You don’t have permission to access this resource", 403);
 
     private String message;
