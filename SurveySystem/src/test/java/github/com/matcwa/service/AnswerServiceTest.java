@@ -307,14 +307,15 @@ class AnswerServiceTest {
     }
 
     @Test
-    void shouldCreateNewVoteAndAddVoteToAnswerWhenManyVotePerQuestionIsFalse() {
+    void shouldAddVoteToAnswerWhenManyVotePerQuestionIsAllowed() {
         //given
         HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
         Poll poll=new Poll();
+        poll.setManyVotePerQuestionAllowed(true);
         Question question = new Question("any??",poll);
         Answer answer = new Answer("anyAnswer", question);
         answer.getQuestion().setIpSet(prepareAccountData());
-        given(httpServletRequest.getRemoteAddr()).willReturn("987.654.321");
+        given(httpServletRequest.getRemoteAddr()).willReturn("123.456.789");
         given(answerRepository.findById(1L)).willReturn(Optional.of(answer));
         ArgumentCaptor<Vote> voteCaptor = ArgumentCaptor.forClass(Vote.class);
         //when
@@ -324,6 +325,23 @@ class AnswerServiceTest {
         assertNull(response.getError());
         assertEquals(response.getDto(), AnswerMapper.toDto(answer));
         assertEquals(voteCaptor.getValue().getAnswer(), answer);
+    }
+    @Test
+    void shouldNotAddVoteToAnswerWhenManyVotePerQuestionIsNotAllowed() {
+        //given
+        HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
+        Poll poll=new Poll();
+        poll.setManyVotePerQuestionAllowed(false);
+        Question question = new Question("any??",poll);
+        Answer answer = new Answer("anyAnswer", question);
+        answer.getQuestion().setIpSet(prepareAccountData());
+        given(httpServletRequest.getRemoteAddr()).willReturn("123.456.789");
+        given(answerRepository.findById(1L)).willReturn(Optional.of(answer));
+        //when
+        ErrorHandling<AnswerDto, AnswerError> response = answerService.addVoteToAnswer(1L, httpServletRequest);
+        //then
+        assertNull(response.getDto());
+        assertEquals(response.getError(), AnswerError.ONE_VOTE_PER_QUESTION);
     }
 
     @Test
@@ -340,7 +358,7 @@ class AnswerServiceTest {
     }
 
     @Test
-    void shouldReturnOneVotePerIpError() {
+    void shouldReturnOneVotePerQuestionError() {
         //given
         HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
         Poll poll=new Poll();
@@ -354,6 +372,24 @@ class AnswerServiceTest {
         //then
         assertNull(response.getDto());
         assertEquals(response.getError(), AnswerError.ONE_VOTE_PER_QUESTION);
+    }
+    @Test
+    void shouldReturnOneVotePerAnswerError() {
+        //given
+        HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
+        Poll poll=new Poll();
+        poll.setManyVotePerQuestionAllowed(true);
+        Question question = new Question("any?", poll);
+        Answer answer = new Answer("anyAnswer", question);
+        answer.setIpSet(prepareAccountData());
+        answer.getQuestion().setIpSet(prepareAccountData());
+        given(httpServletRequest.getRemoteAddr()).willReturn("123.456.789");
+        given(answerRepository.findById(1L)).willReturn(Optional.of(answer));
+        //when
+        ErrorHandling<AnswerDto, AnswerError> response = answerService.addVoteToAnswer(1L, httpServletRequest);
+        //then
+        assertNull(response.getDto());
+        assertEquals(response.getError(), AnswerError.ONE_VOTE_PER_IP_ANSWER);
     }
 
     private Set<String> prepareAccountData() {

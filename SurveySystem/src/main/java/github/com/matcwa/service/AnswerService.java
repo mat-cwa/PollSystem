@@ -46,10 +46,7 @@ public class AnswerService {
                 ErrorHandling<NewAnswerDto, AnswerError> newAnswer = validateNewAnswer(newAnswerDto);
                 if (question.getPoll().getOwner() == user || tokenService.getRoleFromToken(token).equals("ADMIN")) {
                     if (newAnswer.getDto() != null) {
-                        Answer answer = AnswerMapper.newToSource(newAnswerDto);
-                        answer.setQuestion(question);
-                        question.addAnswer(answer);
-                        answerRepository.save(answer);
+                        saveAnswer(question,newAnswerDto);
                         response.setDto(QuestionMapper.toDto(question));
                     } else {
                         response.setError(newAnswer.getError());
@@ -102,23 +99,15 @@ public class AnswerService {
         String remoteAddr = httpServletRequest.getRemoteAddr();
         ErrorHandling<AnswerDto, AnswerError> response = new ErrorHandling<>();
         answerRepository.findById(id).ifPresentOrElse(answer -> {
-            if (answer.getQuestion().getPoll().isManyVotePerQuestion()) {
+            if (answer.getQuestion().getPoll().isManyVotePerQuestionAllowed()) {
                 if (!isVoteForThisIpAddressAlreadyAdded(remoteAddr, answer)) {
-                    Vote vote = new Vote();
-                    vote.setAnswer(answer);
-                    voteRepository.save(vote);
-                    answer.addVote(vote);
-                    answer.addIpAddress(remoteAddr);
+                    saveVote(answer,remoteAddr);
                     response.setDto(AnswerMapper.toDto(answer));
                 } else {
                     response.setError(AnswerError.ONE_VOTE_PER_IP_ANSWER);
                 }
-            } else if (!isVoteForThisIpAddressAlreadyAdded(remoteAddr, answer.getQuestion())) {
-                Vote vote = new Vote();
-                vote.setAnswer(answer);
-                voteRepository.save(vote);
-                answer.addVote(vote);
-                answer.getQuestion().addIpAddress(remoteAddr);
+            } else if (!isVoteForThisIpAddressAlreadyAdded(remoteAddr, answer)) {
+                saveVote(answer,remoteAddr);
                 response.setDto(AnswerMapper.toDto(answer));
             } else response.setError(AnswerError.ONE_VOTE_PER_QUESTION);
         }, () -> response.setError(AnswerError.ANSWER_NOT_FOUND_ERROR));
@@ -126,12 +115,11 @@ public class AnswerService {
     }
 
 
-    private boolean isVoteForThisIpAddressAlreadyAdded(String ipAddress, Question question) {
-        return question.getIpSet().contains(ipAddress);
-    }
-
     private boolean isVoteForThisIpAddressAlreadyAdded(String ipAddress, Answer answer) {
-        return answer.getIpSet().contains(ipAddress);
+        if (answer.getQuestion().getPoll().isManyVotePerQuestionAllowed())
+            return answer.getIpSet().contains(ipAddress);
+        else
+            return answer.getQuestion().getIpSet().contains(ipAddress);
     }
 
     private ErrorHandling<NewAnswerDto, AnswerError> validateNewAnswer(NewAnswerDto newAnswerDto) {
@@ -142,5 +130,23 @@ public class AnswerService {
             newAnswer.setDto(newAnswerDto);
         }
         return newAnswer;
+    }
+
+    private void saveVote(Answer answer, String remoteAddr) {
+        Vote vote = new Vote();
+        vote.setAnswer(answer);
+        voteRepository.save(vote);
+        answer.addVote(vote);
+        if (answer.getQuestion().getPoll().isManyVotePerQuestionAllowed())
+            answer.addIpAddress(remoteAddr);
+        else
+            answer.getQuestion().addIpAddress(remoteAddr);
+    }
+
+    private void saveAnswer(Question question,NewAnswerDto newAnswerDto){
+        Answer answer = AnswerMapper.newToSource(newAnswerDto);
+        answer.setQuestion(question);
+        question.addAnswer(answer);
+        answerRepository.save(answer);
     }
 }

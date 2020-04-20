@@ -42,10 +42,6 @@ public class Question {
         ipSet.add(ipAddress);
     }
 
-    public void addIpAdress(String ip) {
-        ipSet.add(ip);
-    }
-
     public Long getId() {
         return id;
     }

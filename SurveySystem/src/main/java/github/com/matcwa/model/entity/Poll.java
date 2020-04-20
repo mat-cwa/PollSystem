@@ -17,7 +17,7 @@ public class Poll {
     private User owner;
     @OneToMany(cascade = {CascadeType.REMOVE,CascadeType.PERSIST}, mappedBy = "poll")
     private Set<Question> questions=new HashSet<>();
-    private boolean manyVotePerQuestion;
+    private boolean manyVotePerQuestionAllowed;
 
     public Poll() {
     }
@@ -67,12 +67,12 @@ public class Poll {
         this.questions = questions;
     }
 
-    public boolean isManyVotePerQuestion() {
-        return manyVotePerQuestion;
+    public boolean isManyVotePerQuestionAllowed() {
+        return manyVotePerQuestionAllowed;
     }
 
-    public void setManyVotePerQuestion(boolean manyVotePerQuestion) {
-        this.manyVotePerQuestion = manyVotePerQuestion;
+    public void setManyVotePerQuestionAllowed(boolean manyVotePerQuestionAllowed) {
+        this.manyVotePerQuestionAllowed = manyVotePerQuestionAllowed;
     }
 
     @Override

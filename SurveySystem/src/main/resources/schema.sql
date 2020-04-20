@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS POLL.POLL(
 id bigserial PRIMARY KEY,
 name VARCHAR(255),
 fk_user BIGINT REFERENCES POLL.USER(id),
-manyVotePerQuestion BOOLEAN
+many_vote_per_question_allowed BOOLEAN
 );
 
 CREATE TABLE IF NOT EXISTS POLL.QUESTION(
