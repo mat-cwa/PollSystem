@@ -1,7 +1,7 @@
 package github.com.matcwa.api.jwt;
 
 import github.com.matcwa.api.dto.UserLoginDto;
-import github.com.matcwa.model.Role;
+import github.com.matcwa.model.enums.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

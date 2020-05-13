@@ -1,6 +1,6 @@
 package github.com.matcwa.api.error;
 
-import github.com.matcwa.infrastructure.ResponseError;
+import github.com.matcwa.infrastructure.error.ResponseError;
 
 public enum  TokenError implements ResponseError {
     TOKEN_NOT_FOUND_ERROR("Token not exist", 404),

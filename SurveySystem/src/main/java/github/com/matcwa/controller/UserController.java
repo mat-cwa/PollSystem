@@ -2,7 +2,7 @@ package github.com.matcwa.controller;
 
 import github.com.matcwa.api.dto.UserLoginDto;
 import github.com.matcwa.api.dto.UserRegistrationDto;
-import github.com.matcwa.infrastructure.ResponseResolver;
+import github.com.matcwa.infrastructure.error.ResponseResolver;
 import github.com.matcwa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

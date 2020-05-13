@@ -7,7 +7,7 @@ import github.com.matcwa.api.error.*;
 import github.com.matcwa.api.jwt.TokenService;
 import github.com.matcwa.api.mapper.PollMapper;
 import github.com.matcwa.model.entity.Poll;
-import github.com.matcwa.model.Role;
+import github.com.matcwa.model.enums.Role;
 import github.com.matcwa.model.entity.User;
 import github.com.matcwa.repository.PollRepository;
 import github.com.matcwa.repository.UserRepository;

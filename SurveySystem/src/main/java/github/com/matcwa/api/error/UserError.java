@@ -1,6 +1,6 @@
 package github.com.matcwa.api.error;
 
-import github.com.matcwa.infrastructure.ResponseError;
+import github.com.matcwa.infrastructure.error.ResponseError;
 
 public enum UserError implements ResponseError {
     USER_NOT_FOUND_ERROR("User not exist", 404),

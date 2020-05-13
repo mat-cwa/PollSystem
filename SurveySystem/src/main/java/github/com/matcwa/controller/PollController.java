@@ -3,7 +3,7 @@ package github.com.matcwa.controller;
 import github.com.matcwa.api.dto.SuccessResponseDto;
 import github.com.matcwa.api.dto.NewPollDto;
 import github.com.matcwa.api.error.*;
-import github.com.matcwa.infrastructure.ResponseResolver;
+import github.com.matcwa.infrastructure.error.ResponseResolver;
 import github.com.matcwa.api.dto.PollDto;
 import github.com.matcwa.service.PollService;
 import org.springframework.beans.factory.annotation.Autowired;

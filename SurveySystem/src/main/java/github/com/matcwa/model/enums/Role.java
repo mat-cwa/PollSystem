@@ -1,4 +1,4 @@
-package github.com.matcwa.model;
+package github.com.matcwa.model.enums;
 
 public enum Role {
     USER(),

@@ -7,7 +7,7 @@ import github.com.matcwa.api.jwt.TokenService;
 import github.com.matcwa.api.mapper.AnswerMapper;
 import github.com.matcwa.api.mapper.QuestionMapper;
 import github.com.matcwa.model.entity.Answer;
-import github.com.matcwa.model.Role;
+import github.com.matcwa.model.enums.Role;
 import github.com.matcwa.model.entity.Question;
 import github.com.matcwa.model.entity.Vote;
 import github.com.matcwa.repository.AnswerRepository;

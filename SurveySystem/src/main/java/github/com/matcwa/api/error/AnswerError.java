@@ -1,6 +1,6 @@
 package github.com.matcwa.api.error;
 
-import github.com.matcwa.infrastructure.ResponseError;
+import github.com.matcwa.infrastructure.error.ResponseError;
 
 public enum  AnswerError implements ResponseError {
     WRONG_NAME_ERROR("Invalid name", 400),

@@ -1,6 +1,5 @@
 package github.com.matcwa.service;
 
-import github.com.matcwa.api.dto.SuccessResponseDto;
 import github.com.matcwa.api.dto.UserDto;
 import github.com.matcwa.api.dto.UserLoginDto;
 import github.com.matcwa.api.dto.UserRegistrationDto;
@@ -9,7 +8,7 @@ import github.com.matcwa.api.error.TokenError;
 import github.com.matcwa.api.error.UserError;
 import github.com.matcwa.api.jwt.TokenService;
 import github.com.matcwa.api.mapper.UserMapper;
-import github.com.matcwa.model.TokenType;
+import github.com.matcwa.model.enums.TokenType;
 import github.com.matcwa.model.entity.Token;
 import github.com.matcwa.model.entity.User;
 import github.com.matcwa.repository.TokenRepository;
@@ -164,7 +163,7 @@ class UserServiceTest {
     void shouldReturnUserDtoAndNullError() {
         //given
         UserLoginDto userLoginDto = new UserLoginDto("login", "anyPassword");
-        User user = new User("login","anyPassword");
+        User user = new User("login",BCrypt.hashpw("anyPassword",BCrypt.gensalt()));
         user.setActive(true);
         given(userRepository.findByUsername(user.getUsername())).willReturn(Optional.of(user));
         given(tokenService.generateTokenFor(userLoginDto)).willReturn("token");
@@ -178,7 +177,7 @@ class UserServiceTest {
     void shouldReturnNullUserDtoAndUserInactiveError() {
         //given
         UserLoginDto userLoginDto = new UserLoginDto("login", "anyPassword");
-        User user = new User("login","anyPassword");
+        User user = new User("login",BCrypt.hashpw("anyPassword",BCrypt.gensalt()));
         given(userRepository.findByUsername(user.getUsername())).willReturn(Optional.of(user));
         //when
         ErrorHandling<UserDto, UserError> login = userService.login(userLoginDto);
@@ -190,10 +189,10 @@ class UserServiceTest {
     @Test
     void shouldReturnNullUserDtoAndWrongPasswordError() {
         //given
-        UserLoginDto userLoginDto = new UserLoginDto("login", "anyPassword");
+        UserLoginDto userLoginDto = new UserLoginDto("login","anyPassword");
         User user = new User();
         user.setUsername("login");
-        user.setPassword("wrongPassword");
+        user.setPassword(BCrypt.hashpw("wrongPassword",BCrypt.gensalt()));
         given(userRepository.findByUsername(user.getUsername())).willReturn(Optional.of(user));
         //when
         ErrorHandling<UserDto, UserError> login = userService.login(userLoginDto);

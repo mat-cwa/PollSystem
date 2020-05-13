@@ -1,6 +1,6 @@
 package github.com.matcwa.model.entity;
 
-import github.com.matcwa.model.TokenType;
+import github.com.matcwa.model.enums.TokenType;
 
 import javax.persistence.*;
 import java.util.Date;

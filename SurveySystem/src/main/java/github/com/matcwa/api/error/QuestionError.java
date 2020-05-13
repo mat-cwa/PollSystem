@@ -1,6 +1,6 @@
 package github.com.matcwa.api.error;
 
-import github.com.matcwa.infrastructure.ResponseError;
+import github.com.matcwa.infrastructure.error.ResponseError;
 
 public enum QuestionError implements ResponseError {
     EMPTY_CONTENT_ERROR("THE QUESTION CONTENT CANT BE EMPTY", 400),

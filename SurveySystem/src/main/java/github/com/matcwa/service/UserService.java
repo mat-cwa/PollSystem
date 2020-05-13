@@ -1,6 +1,5 @@
 package github.com.matcwa.service;
 
-import github.com.matcwa.api.dto.SuccessResponseDto;
 import github.com.matcwa.api.dto.UserDto;
 import github.com.matcwa.api.dto.UserLoginDto;
 import github.com.matcwa.api.dto.UserRegistrationDto;
@@ -9,7 +8,7 @@ import github.com.matcwa.api.error.TokenError;
 import github.com.matcwa.api.error.UserError;
 import github.com.matcwa.api.jwt.TokenService;
 import github.com.matcwa.api.mapper.UserMapper;
-import github.com.matcwa.model.TokenType;
+import github.com.matcwa.model.enums.TokenType;
 import github.com.matcwa.model.entity.Token;
 import github.com.matcwa.model.entity.User;
 import github.com.matcwa.repository.TokenRepository;
@@ -93,7 +92,7 @@ public class UserService {
     private boolean checkPassword(String passwordToCheck, User user) {
         if (null == passwordToCheck || !user.getPassword().startsWith("$2a$"))
             throw new java.lang.IllegalArgumentException("Invalid hash provided for comparison");
-        return BCrypt.checkpw(passwordToCheck, user.getPassword()); //todo BCrypt
+        return BCrypt.checkpw(passwordToCheck, user.getPassword());
     }
 
     private boolean isRegistersCredentialsEmpty(UserRegistrationDto newUser, ErrorHandling<UserDto, UserError> errorHandling) {

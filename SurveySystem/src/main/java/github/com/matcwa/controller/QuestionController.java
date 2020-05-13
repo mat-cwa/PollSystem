@@ -6,7 +6,7 @@ import github.com.matcwa.api.dto.PollDto;
 import github.com.matcwa.api.dto.QuestionDto;
 import github.com.matcwa.api.error.ErrorHandling;
 import github.com.matcwa.api.error.QuestionError;
-import github.com.matcwa.infrastructure.ResponseResolver;
+import github.com.matcwa.infrastructure.error.ResponseResolver;
 import github.com.matcwa.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

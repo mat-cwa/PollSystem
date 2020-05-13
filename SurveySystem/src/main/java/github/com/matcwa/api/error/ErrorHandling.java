@@ -1,6 +1,6 @@
 package github.com.matcwa.api.error;
 
-import github.com.matcwa.infrastructure.ResponseError;
+import github.com.matcwa.infrastructure.error.ResponseError;
 
 public class ErrorHandling<T, U extends ResponseError> {
     private T dto;

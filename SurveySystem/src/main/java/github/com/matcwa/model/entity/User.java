@@ -1,6 +1,6 @@
 package github.com.matcwa.model.entity;
 
-import github.com.matcwa.model.Role;
+import github.com.matcwa.model.enums.Role;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
