@@ -97,9 +97,9 @@ public class UserService {
             userRepository.findById(userId).ifPresentOrElse(user -> {
                 if (!user.getRole().equals(Role.ADMIN)) {
                     userRepository.findByUsername(tokenService.getUsernameFromToken(token)).ifPresentOrElse(promoter -> {
-                        Token promoteToken = new Token(UUID.randomUUID().toString(), promoter, TokenType.PERMISSION, true);
+                        Token promoteToken = new Token(UUID.randomUUID().toString(), user, TokenType.PERMISSION, true);
                         tokenRepository.save(promoteToken);
-                        emailService.sendPromoteToAdminEmailTo(promoter.getEmail(),promoteToken.getValue(),user);
+                        emailService.sendPromoteToAdminEmailTo(promoter.getEmail(), promoteToken.getValue(), user);
                         response.setDto(UserMapper.toDto(user));
                     }, () -> response.setError(UserError.PROMOTER_NOT_FOUND));
                 } else {
@@ -109,6 +109,27 @@ public class UserService {
         } else {
             response.setError(UserError.AUTHORIZATION_ERROR);
         }
+        return response;
+    }
+
+    @Transactional
+    public ErrorHandling<SuccessResponseDto, TokenError> confirmPromoteUserToAdmin(String promoteToken, String jwtoken) {
+        ErrorHandling<SuccessResponseDto, TokenError> response = new ErrorHandling<>();
+        tokenRepository.findByValue(promoteToken).ifPresentOrElse(tokenToConfirm -> {
+            if (tokenService.getRoleFromToken(jwtoken).equals(Role.ADMIN.name())) {
+                if (tokenToConfirm.isActive()) {
+                    tokenToConfirm.getOwner().setRole(Role.ADMIN);
+                    tokenToConfirm.setActive(false);
+                    tokenToConfirm.setConfirmed(true);
+                    tokenRepository.save(tokenToConfirm);
+                    response.setDto(new SuccessResponseDto("Success!"));
+                } else {
+                    response.setError(TokenError.TOKEN_IS_INACTIVE);
+                }
+            } else {
+                response.setError(TokenError.AUTHORIZATION_ERROR);
+            }
+        }, () -> response.setError(TokenError.TOKEN_NOT_FOUND_ERROR));
         return response;
     }
 

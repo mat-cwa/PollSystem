@@ -1,5 +1,6 @@
 package github.com.matcwa.service;
 
+import github.com.matcwa.api.dto.SuccessResponseDto;
 import github.com.matcwa.api.dto.UserDto;
 import github.com.matcwa.api.dto.UserLoginDto;
 import github.com.matcwa.api.dto.UserRegistrationDto;
@@ -51,27 +52,28 @@ class UserServiceTest {
     }
 
     @Test
-    void shouldReturnUsernameAndEmailIsEmptyError(){
+    void shouldReturnUsernameAndEmailIsEmptyError() {
         //given
-        UserRegistrationDto emptyUsername=new UserRegistrationDto("","password","taken@email.com");
-        UserRegistrationDto emptyPassword=new UserRegistrationDto("anyuser",null,"any@email.com");
+        UserRegistrationDto emptyUsername = new UserRegistrationDto("", "password", "taken@email.com");
+        UserRegistrationDto emptyPassword = new UserRegistrationDto("anyuser", null, "any@email.com");
         //when
-        ErrorHandling<UserDto,UserError> emptyUsernameResponse=userService.registerUser(emptyUsername);
-        ErrorHandling<UserDto,UserError> emptyPasswordResponse=userService.registerUser(emptyPassword);
+        ErrorHandling<UserDto, UserError> emptyUsernameResponse = userService.registerUser(emptyUsername);
+        ErrorHandling<UserDto, UserError> emptyPasswordResponse = userService.registerUser(emptyPassword);
         //then
         assertNull(emptyUsernameResponse.getDto());
-        assertEquals(emptyUsernameResponse.getError(),UserError.EMPTY_USERNAME_ERROR);
+        assertEquals(emptyUsernameResponse.getError(), UserError.EMPTY_USERNAME_ERROR);
         assertNull(emptyPasswordResponse.getDto());
-        assertEquals(emptyPasswordResponse.getError(),UserError.EMPTY_PASSWORD_ERROR);
+        assertEquals(emptyPasswordResponse.getError(), UserError.EMPTY_PASSWORD_ERROR);
 
     }
+
     @Test
-    void shouldReturnUserAlreadyExistsError(){
+    void shouldReturnUserAlreadyExistsError() {
         //given
-        UserRegistrationDto takenUsername=new UserRegistrationDto("user","password","taken@email.com");
-        UserRegistrationDto takenEmail=new UserRegistrationDto("anyuser","password","any@email.com");
-        UserRegistrationDto takenEmailAndUsername=new UserRegistrationDto("takenuser","password","taken2@email.com");
-        User user=new User("user","password");
+        UserRegistrationDto takenUsername = new UserRegistrationDto("user", "password", "taken@email.com");
+        UserRegistrationDto takenEmail = new UserRegistrationDto("anyuser", "password", "any@email.com");
+        UserRegistrationDto takenEmailAndUsername = new UserRegistrationDto("takenuser", "password", "taken2@email.com");
+        User user = new User("user", "password");
         given(userRepository.findByUsername("user")).willReturn(Optional.of(user));
         given(userRepository.findByUsername("anyuser")).willReturn(Optional.empty());
         given(userRepository.findByEmail("any@email.com")).willReturn(Optional.of(user));
@@ -79,92 +81,95 @@ class UserServiceTest {
         given(userRepository.findByUsername("takenuser")).willReturn(Optional.of(user));
         given(userRepository.findByEmail("taken2@email.com")).willReturn(Optional.of(user));
         //when
-        ErrorHandling<UserDto,UserError> usernameAlreadyExistsResponse=userService.registerUser(takenUsername);
-        ErrorHandling<UserDto,UserError> emailAlreadyExistsResponse=userService.registerUser(takenEmail);
-        ErrorHandling<UserDto,UserError> emailAndUsernameAlreadyExistsResponse=userService.registerUser(takenEmailAndUsername);
+        ErrorHandling<UserDto, UserError> usernameAlreadyExistsResponse = userService.registerUser(takenUsername);
+        ErrorHandling<UserDto, UserError> emailAlreadyExistsResponse = userService.registerUser(takenEmail);
+        ErrorHandling<UserDto, UserError> emailAndUsernameAlreadyExistsResponse = userService.registerUser(takenEmailAndUsername);
         //then
         assertNull(usernameAlreadyExistsResponse.getDto());
-        assertEquals(usernameAlreadyExistsResponse.getError(),UserError.USERNAME_ALREADY_EXISTS);
+        assertEquals(usernameAlreadyExistsResponse.getError(), UserError.USERNAME_ALREADY_EXISTS);
         assertNull(emailAlreadyExistsResponse.getDto());
-        assertEquals(emailAlreadyExistsResponse.getError(),UserError.EMAIL_ALREADY_EXISTS);
+        assertEquals(emailAlreadyExistsResponse.getError(), UserError.EMAIL_ALREADY_EXISTS);
         assertNull(emailAndUsernameAlreadyExistsResponse.getDto());
-        assertEquals(emailAndUsernameAlreadyExistsResponse.getError(),UserError.USERNAME_AND_EMAIL_ALREADY_EXISTS);
+        assertEquals(emailAndUsernameAlreadyExistsResponse.getError(), UserError.USERNAME_AND_EMAIL_ALREADY_EXISTS);
     }
+
     @Test
-    void shouldCreateNewUser(){
+    void shouldCreateNewUser() {
         //give
-        UserRegistrationDto newUser=new UserRegistrationDto("anylogin","password","anyemail@email.com");
-        User user=new User(newUser.getUsername(),BCrypt.hashpw(newUser.getPassword(),BCrypt.gensalt()),newUser.getEmail());
-        ArgumentCaptor<User> userCaptor=ArgumentCaptor.forClass(User.class);
+        UserRegistrationDto newUser = new UserRegistrationDto("anylogin", "password", "anyemail@email.com");
+        User user = new User(newUser.getUsername(), BCrypt.hashpw(newUser.getPassword(), BCrypt.gensalt()), newUser.getEmail());
+        ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
         given(userRepository.findByUsername("anylogin")).willReturn(Optional.empty());
         given(userRepository.findByEmail("anyemail@email.com")).willReturn(Optional.empty());
-        willDoNothing().given(emailService).sendRegistrationEmailTo(anyString(),anyString());
+        willDoNothing().given(emailService).sendRegistrationEmailTo(anyString(), anyString());
         //when
         ErrorHandling<UserDto, UserError> response = userService.registerUser(newUser);
         //then
-        verify(userRepository,times(1)).save(userCaptor.capture());
+        verify(userRepository, times(1)).save(userCaptor.capture());
         assertNull(response.getError());
-        assertEquals(user,userCaptor.getValue());
+        assertEquals(user, userCaptor.getValue());
         assertEquals(response.getDto(), UserMapper.toDto(user));
 
     }
+
     @Test
-    void shouldCreateNewToken(){
+    void shouldCreateNewToken() {
         //give
-        UserRegistrationDto newUser=new UserRegistrationDto("anylogin","password","anyemail@email.com");
-        User user=new User(newUser.getUsername(),BCrypt.hashpw(newUser.getPassword(),BCrypt.gensalt()),newUser.getEmail());
-        Token token=new Token("anyvalue",user, TokenType.REGISTRATION,true);
-        ArgumentCaptor<Token> tokenCaptor=ArgumentCaptor.forClass(Token.class);
+        UserRegistrationDto newUser = new UserRegistrationDto("anylogin", "password", "anyemail@email.com");
+        User user = new User(newUser.getUsername(), BCrypt.hashpw(newUser.getPassword(), BCrypt.gensalt()), newUser.getEmail());
+        Token token = new Token("anyvalue", user, TokenType.REGISTRATION, true);
+        ArgumentCaptor<Token> tokenCaptor = ArgumentCaptor.forClass(Token.class);
         //when
         ErrorHandling<UserDto, UserError> response = userService.registerUser(newUser);
         //then
-        verify(tokenRepository,times(1)).save(tokenCaptor.capture());
+        verify(tokenRepository, times(1)).save(tokenCaptor.capture());
         assertNull(response.getError());
-        assertEquals(tokenCaptor.getValue(),token);
+        assertEquals(tokenCaptor.getValue(), token);
         assertEquals(response.getDto(), UserMapper.toDto(user));
     }
+
     @Test
-    void shouldReturnTokenNotFoundError(){
+    void shouldReturnTokenNotFoundError() {
         //given
         when(tokenRepository.findByValue("token")).thenReturn(Optional.empty());
         //when
         ErrorHandling<UserDto, TokenError> response = userService.activateAccount("token");
         //then
         assertNull(response.getDto());
-        assertEquals(response.getError(),TokenError.TOKEN_NOT_FOUND_ERROR);
+        assertEquals(response.getError(), TokenError.TOKEN_NOT_FOUND_ERROR);
     }
 
     @Test
-    void shouldReturnTokenIsInactiveError(){
+    void shouldReturnTokenIsInactiveError() {
         //given
-        Token token=new Token("token",null,TokenType.REGISTRATION,false);
+        Token token = new Token("token", null, TokenType.REGISTRATION, false);
         when(tokenRepository.findByValue("token")).thenReturn(Optional.of(token));
         //when
         ErrorHandling<UserDto, TokenError> response = userService.activateAccount("token");
         //then
         assertNull(response.getDto());
-        assertEquals(response.getError(),TokenError.TOKEN_IS_INACTIVE);
+        assertEquals(response.getError(), TokenError.TOKEN_IS_INACTIVE);
     }
 
     @Test
-    void shouldActivateAccount(){
+    void shouldActivateAccount() {
         //given
-        User user=new User();
+        User user = new User();
         user.setActive(true);
-        Token token=new Token("anyValue",user,TokenType.REGISTRATION,true);
+        Token token = new Token("anyValue", user, TokenType.REGISTRATION, true);
         when(tokenRepository.findByValue("anyValue")).thenReturn(Optional.of(token));
         //when
         ErrorHandling<UserDto, TokenError> response = userService.activateAccount("anyValue");
         //then
         assertNull(response.getError());
-        assertEquals(UserMapper.toDto(user),response.getDto());
+        assertEquals(UserMapper.toDto(user), response.getDto());
     }
 
     @Test
     void shouldReturnUserDtoAndNullError() {
         //given
         UserLoginDto userLoginDto = new UserLoginDto("login", "anyPassword");
-        User user = new User("login",BCrypt.hashpw("anyPassword",BCrypt.gensalt()));
+        User user = new User("login", BCrypt.hashpw("anyPassword", BCrypt.gensalt()));
         user.setActive(true);
         given(userRepository.findByUsername(user.getUsername())).willReturn(Optional.of(user));
         given(tokenService.generateTokenFor(userLoginDto)).willReturn("token");
@@ -174,11 +179,12 @@ class UserServiceTest {
         assertEquals(login.getDto(), UserMapper.toDto(user));
         assertNull(login.getError());
     }
+
     @Test
     void shouldReturnNullUserDtoAndUserInactiveError() {
         //given
         UserLoginDto userLoginDto = new UserLoginDto("login", "anyPassword");
-        User user = new User("login",BCrypt.hashpw("anyPassword",BCrypt.gensalt()));
+        User user = new User("login", BCrypt.hashpw("anyPassword", BCrypt.gensalt()));
         given(userRepository.findByUsername(user.getUsername())).willReturn(Optional.of(user));
         //when
         ErrorHandling<UserDto, UserError> login = userService.login(userLoginDto);
@@ -190,10 +196,10 @@ class UserServiceTest {
     @Test
     void shouldReturnNullUserDtoAndWrongPasswordError() {
         //given
-        UserLoginDto userLoginDto = new UserLoginDto("login","anyPassword");
+        UserLoginDto userLoginDto = new UserLoginDto("login", "anyPassword");
         User user = new User();
         user.setUsername("login");
-        user.setPassword(BCrypt.hashpw("wrongPassword",BCrypt.gensalt()));
+        user.setPassword(BCrypt.hashpw("wrongPassword", BCrypt.gensalt()));
         given(userRepository.findByUsername(user.getUsername())).willReturn(Optional.of(user));
         //when
         ErrorHandling<UserDto, UserError> login = userService.login(userLoginDto);
@@ -257,18 +263,20 @@ class UserServiceTest {
         response.forEach(error -> assertEquals(error.getError(), UserError.EMPTY_USERNAME_AND_PASSWORD_ERROR));
         response.forEach(error -> assertNull(error.getDto()));
     }
+
     @Test
-    void shouldReturnAuthorizationErrorWhenTryPromoteUserToAdmin(){
+    void shouldReturnAuthorizationErrorWhenTryPromoteUserToAdmin() {
         //given
         given(tokenService.getRoleFromToken("token")).willReturn(Role.USER.name());
         //when
         ErrorHandling<UserDto, UserError> response = userService.promoteUserToAdmin("token", 1L);
         //then
         assertNull(response.getDto());
-        assertEquals(response.getError(),UserError.AUTHORIZATION_ERROR);
+        assertEquals(response.getError(), UserError.AUTHORIZATION_ERROR);
     }
+
     @Test
-    void shouldReturnUserNotFoundErrorWhenTryPromoteUserToAdmin(){
+    void shouldReturnUserNotFoundErrorWhenTryPromoteUserToAdmin() {
         //given
         given(tokenService.getRoleFromToken("token")).willReturn(Role.ADMIN.name());
         given(userRepository.findById(1L)).willReturn(Optional.empty());
@@ -276,12 +284,13 @@ class UserServiceTest {
         ErrorHandling<UserDto, UserError> response = userService.promoteUserToAdmin("token", 1L);
         //then
         assertNull(response.getDto());
-        assertEquals(response.getError(),UserError.USER_NOT_FOUND_ERROR);
+        assertEquals(response.getError(), UserError.USER_NOT_FOUND_ERROR);
     }
+
     @Test
-    void shouldReturnUserAlreadyHasAdminsRoleErrorWhenTryPromoteUserToAdmin(){
+    void shouldReturnUserAlreadyHasAdminsRoleErrorWhenTryPromoteUserToAdmin() {
         //given
-        User user=new User();
+        User user = new User();
         user.setRole(Role.ADMIN);
         given(tokenService.getRoleFromToken("token")).willReturn(Role.ADMIN.name());
         given(userRepository.findById(1L)).willReturn(Optional.of(user));
@@ -289,12 +298,13 @@ class UserServiceTest {
         ErrorHandling<UserDto, UserError> response = userService.promoteUserToAdmin("token", 1L);
         //then
         assertNull(response.getDto());
-        assertEquals(response.getError(),UserError.ADMIN_ROLE_ALREADY_EXIST);
+        assertEquals(response.getError(), UserError.ADMIN_ROLE_ALREADY_EXIST);
     }
+
     @Test
-    void shouldReturnPromoterNotExistErrorWhenTryPromoteUserToAdmin(){
+    void shouldReturnPromoterNotExistErrorWhenTryPromoteUserToAdmin() {
         //given
-        User user=new User();
+        User user = new User();
         given(tokenService.getRoleFromToken("token")).willReturn(Role.ADMIN.name());
         given(userRepository.findById(1L)).willReturn(Optional.of(user));
         given(tokenService.getUsernameFromToken("token")).willReturn("promoter");
@@ -303,15 +313,16 @@ class UserServiceTest {
         ErrorHandling<UserDto, UserError> response = userService.promoteUserToAdmin("token", 1L);
         //then
         assertNull(response.getDto());
-        assertEquals(response.getError(),UserError.PROMOTER_NOT_FOUND);
+        assertEquals(response.getError(), UserError.PROMOTER_NOT_FOUND);
     }
+
     @Test
-    void shouldSendEmailToPromoterWhenTryPromoteUserToAdmin(){
+    void shouldSendEmailToPromoterWhenTryPromoteUserToAdmin() {
         //given
-        User user=new User("user","password");
-        User promoter=new User("promoter","password");
+        User user = new User("user", "password");
+        User promoter = new User("promoter", "password");
         promoter.setEmail("promoter@email.com");
-        ArgumentCaptor<User> userCaptor=ArgumentCaptor.forClass(User.class);
+        ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
         given(tokenService.getRoleFromToken("token")).willReturn(Role.ADMIN.name());
         given(userRepository.findById(1L)).willReturn(Optional.of(user));
         given(tokenService.getUsernameFromToken("token")).willReturn("promoter");
@@ -319,8 +330,62 @@ class UserServiceTest {
         //when
         ErrorHandling<UserDto, UserError> response = userService.promoteUserToAdmin("token", 1L);
         //then
-        verify(emailService,times(1)).sendPromoteToAdminEmailTo(eq("promoter@email.com"),anyString(),userCaptor.capture());
-        assertEquals(userCaptor.getValue().getUsername(),"user");
+        verify(emailService, times(1)).sendPromoteToAdminEmailTo(eq("promoter@email.com"), anyString(), userCaptor.capture());
+        assertEquals(userCaptor.getValue().getUsername(), "user");
         assertNull(response.getError());
+    }
+
+    @Test
+    void shouldReturnTokenNotFoundErrorWhenTryConfirmPromoteToken() {
+        //given
+        given(tokenRepository.findByValue("token")).willReturn(Optional.empty());
+        //when
+        ErrorHandling<SuccessResponseDto, TokenError> response = userService.confirmPromoteUserToAdmin("token","jwtoken");
+        //then
+        assertNull(response.getDto());
+        assertEquals(response.getError(),TokenError.TOKEN_NOT_FOUND_ERROR);
+    }
+    @Test
+    void shouldReturnAuthorizationErrorWhenTryConfirmPromoteToken() {
+        //given
+        Token token=new Token();
+        given(tokenRepository.findByValue("promoteToken")).willReturn(Optional.of(token));
+        given(tokenService.getRoleFromToken("jwtoken")).willReturn(Role.USER.name());
+        //when
+        ErrorHandling<SuccessResponseDto, TokenError> response = userService.confirmPromoteUserToAdmin("promoteToken","jwtoken");
+        //then
+        assertNull(response.getDto());
+        assertEquals(response.getError(),TokenError.AUTHORIZATION_ERROR);
+    }
+    @Test
+    void shouldReturnInactiveTokenErrorWhenTryConfirmPromoteToken() {
+        //given
+        Token token=new Token();
+        token.setActive(false);
+        given(tokenRepository.findByValue("promoteToken")).willReturn(Optional.of(token));
+        given(tokenService.getRoleFromToken("jwtoken")).willReturn(Role.ADMIN.name());
+        //when
+        ErrorHandling<SuccessResponseDto, TokenError> response = userService.confirmPromoteUserToAdmin("promoteToken","jwtoken");
+        //then
+        assertNull(response.getDto());
+        assertEquals(response.getError(),TokenError.TOKEN_IS_INACTIVE);
+    }
+    @Test
+    void shouldConfirmPromoteUserToAdmin() {
+        //given
+        User user=new User();
+        Token token=new Token();
+        token.setOwner(user);
+        given(tokenRepository.findByValue("promoteToken")).willReturn(Optional.of(token));
+        given(tokenService.getRoleFromToken("jwtoken")).willReturn(Role.ADMIN.name());
+        ArgumentCaptor<Token> tokenCaptor=ArgumentCaptor.forClass(Token.class);
+        //when
+        ErrorHandling<SuccessResponseDto, TokenError> response = userService.confirmPromoteUserToAdmin("promoteToken","jwtoken");
+        //then
+        verify(tokenRepository,times(1)).save(tokenCaptor.capture());
+        assertNull(response.getError());
+        assertEquals(tokenCaptor.getValue().getOwner(),user);
+        assertFalse(tokenCaptor.getValue().isActive());
+        assertTrue(tokenCaptor.getValue().isConfirmed());
     }
 }

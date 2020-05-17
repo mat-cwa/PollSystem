@@ -111,8 +111,8 @@ public class UserDto {
         return isActive() == userDto.isActive() &&
                 Objects.equals(getId(), userDto.getId()) &&
                 Objects.equals(getUsername(), userDto.getUsername()) &&
+                Objects.equals(getRole(), userDto.getRole()) &&
                 Objects.equals(getEmail(), userDto.getEmail()) &&
-                Objects.equals(getDateOfRegistration(), userDto.getDateOfRegistration()) &&
                 Objects.equals(getPollSet(), userDto.getPollSet()) &&
                 Objects.equals(getVotes(), userDto.getVotes());
     }

@@ -27,7 +27,7 @@ private JavaMailSender javaMailSender;
         message.setTo(email);
         message.setSubject("PollSystem");
         message.setText("Click the link to confirm privileges for the user: " +user.getUsername()+"\n"
-                +"http://localhost:8080/pollsystem/user/"+user.getId()+"promoteToAdmin/"+token);
+                +"http://localhost:8080/pollsystem/user/"+user.getUsername()+"/promoteToAdmin/"+token);
         javaMailSender.send(message);
     }
 }

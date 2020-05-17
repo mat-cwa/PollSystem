@@ -4,28 +4,12 @@
     <list default="true" id="9dc98d41-e2a1-4afd-a483-7c4452401f74" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/dto/UserDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/dto/UserDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/error/UserError.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/error/UserError.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/error/TokenError.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/api/error/TokenError.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/model/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/model/entity/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/model/enums/TokenType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/model/enums/TokenType.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/service/EmailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/service/EmailService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/github/com/matcwa/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/github/com/matcwa/service/UserService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/github/com/matcwa/service/UserServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/github/com/matcwa/service/UserServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/api/error/AnswerError.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/api/error/AnswerError.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/api/error/ErrorHandling.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/api/error/ErrorHandling.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/api/error/PollError.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/api/error/PollError.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/api/error/QuestionError.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/api/error/QuestionError.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/api/error/UserError.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/api/error/UserError.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/controller/AnswerController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/controller/AnswerController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/controller/PollController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/controller/PollController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/controller/QuestionController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/controller/QuestionController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/infrastructure/ErrorJS.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/infrastructure/ResponseError.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/infrastructure/ResponseResolver.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/model/Role.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/service/AnswerService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/service/AnswerService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/service/PollService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/service/PollService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/service/QuestionService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/service/QuestionService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/github/com/matcwa/api/dto/UserDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/github/com/matcwa/api/dto/UserDto.class" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -107,7 +91,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="UserServiceTest.shouldReturnAuthorizationErrorWhenTryPromoteUserToAdmin" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="UserServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="SurveySystem" />
       <extension name="coverage">
         <pattern>
@@ -117,13 +101,28 @@
       </extension>
       <option name="PACKAGE_NAME" value="github.com.matcwa.service" />
       <option name="MAIN_CLASS_NAME" value="github.com.matcwa.service.UserServiceTest" />
-      <option name="METHOD_NAME" value="shouldReturnAuthorizationErrorWhenTryPromoteUserToAdmin" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UserServiceTest.shouldConfirmPromoteUserToAdmin" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="SurveySystem" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="github.com.matcwa.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="github.com.matcwa.service" />
+      <option name="MAIN_CLASS_NAME" value="github.com.matcwa.service.UserServiceTest" />
+      <option name="METHOD_NAME" value="shouldConfirmPromoteUserToAdmin" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="UserServiceTest.shouldReturnPromoterNotExistErrorWhenTryPromoteUserToAdmin" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="UserServiceTest.shouldCreateNewUser" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="SurveySystem" />
       <extension name="coverage">
         <pattern>
@@ -133,13 +132,13 @@
       </extension>
       <option name="PACKAGE_NAME" value="github.com.matcwa.service" />
       <option name="MAIN_CLASS_NAME" value="github.com.matcwa.service.UserServiceTest" />
-      <option name="METHOD_NAME" value="shouldReturnPromoterNotExistErrorWhenTryPromoteUserToAdmin" />
+      <option name="METHOD_NAME" value="shouldCreateNewUser" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="UserServiceTest.shouldReturnPromoterNotExistErrorWhenTryPromoteUserToAdmin2" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="UserServiceTest.shouldReturnInactiveTokenErrorWhenTryConfirmPromoteToken" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="SurveySystem" />
       <extension name="coverage">
         <pattern>
@@ -149,23 +148,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="github.com.matcwa.service" />
       <option name="MAIN_CLASS_NAME" value="github.com.matcwa.service.UserServiceTest" />
-      <option name="METHOD_NAME" value="shouldReturnPromoterNotExistErrorWhenTryPromoteUserToAdmin2" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="UserServiceTest.shouldReturnUserAlreadyHasAdminsRoleErrorWhenTryPromoteUserToAdmin" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="SurveySystem" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="github.com.matcwa.service.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="github.com.matcwa.service" />
-      <option name="MAIN_CLASS_NAME" value="github.com.matcwa.service.UserServiceTest" />
-      <option name="METHOD_NAME" value="shouldReturnUserAlreadyHasAdminsRoleErrorWhenTryPromoteUserToAdmin" />
+      <option name="METHOD_NAME" value="shouldReturnInactiveTokenErrorWhenTryConfirmPromoteToken" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -174,10 +157,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.SurveySystemApplication" />
-        <item itemvalue="JUnit.UserServiceTest.shouldReturnPromoterNotExistErrorWhenTryPromoteUserToAdmin2" />
-        <item itemvalue="JUnit.UserServiceTest.shouldReturnPromoterNotExistErrorWhenTryPromoteUserToAdmin" />
-        <item itemvalue="JUnit.UserServiceTest.shouldReturnUserAlreadyHasAdminsRoleErrorWhenTryPromoteUserToAdmin" />
-        <item itemvalue="JUnit.UserServiceTest.shouldReturnAuthorizationErrorWhenTryPromoteUserToAdmin" />
+        <item itemvalue="JUnit.UserServiceTest.shouldConfirmPromoteUserToAdmin" />
+        <item itemvalue="JUnit.UserServiceTest" />
+        <item itemvalue="JUnit.UserServiceTest.shouldCreateNewUser" />
+        <item itemvalue="JUnit.UserServiceTest.shouldReturnInactiveTokenErrorWhenTryConfirmPromoteToken" />
       </list>
     </recent_temporary>
   </component>

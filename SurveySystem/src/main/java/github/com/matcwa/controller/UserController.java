@@ -23,7 +23,7 @@ public class UserController {
         return ResponseResolver.resolve(userService.registerUser(userRegistrationDto));
     }
     @GetMapping("/user/activate/{token}")
-    public ResponseEntity login(@PathVariable String token){
+    public ResponseEntity activeAccount(@PathVariable String token){
         return ResponseResolver.resolve(userService.activateAccount(token));
     }
     @PostMapping("/login")
@@ -33,5 +33,9 @@ public class UserController {
     @PostMapping("/user/{id}/promoteToAdmin")
     public ResponseEntity promoteToAdmin(@PathVariable Long id,@RequestHeader("Authorization") String token){
         return ResponseResolver.resolve(userService.promoteUserToAdmin(token,id));
+    }
+    @GetMapping("/user/{username}/promoteToAdmin/{token}")
+    public ResponseEntity confirmPromoteToAdmin(@PathVariable String token,@RequestHeader("Authorization") String jwtoken){
+        return ResponseResolver.resolve(userService.confirmPromoteUserToAdmin(token,jwtoken));
     }
 }
