@@ -1,5 +1,6 @@
 package github.com.matcwa.service;
 
+import github.com.matcwa.api.dto.SuccessResponseDto;
 import github.com.matcwa.api.dto.UserDto;
 import github.com.matcwa.api.dto.UserLoginDto;
 import github.com.matcwa.api.dto.UserRegistrationDto;
@@ -8,6 +9,7 @@ import github.com.matcwa.api.error.TokenError;
 import github.com.matcwa.api.error.UserError;
 import github.com.matcwa.api.jwt.TokenService;
 import github.com.matcwa.api.mapper.UserMapper;
+import github.com.matcwa.model.enums.Role;
 import github.com.matcwa.model.enums.TokenType;
 import github.com.matcwa.model.entity.Token;
 import github.com.matcwa.model.entity.User;
@@ -55,6 +57,7 @@ public class UserService {
         return response;
     }
 
+    @Transactional
     public ErrorHandling<UserDto, TokenError> activateAccount(String token) {
         ErrorHandling<UserDto, TokenError> response = new ErrorHandling<>();
         tokenRepository.findByValue(token).ifPresentOrElse(tokenByValue -> {
@@ -84,6 +87,27 @@ public class UserService {
                     } else response.setError(UserError.USER_INACTIVE_ERROR);
                 } else response.setError(UserError.WRONG_PASSWORD_ERROR);
             }, () -> response.setError(UserError.USER_NOT_FOUND_ERROR));
+        }
+        return response;
+    }
+
+    public ErrorHandling<UserDto, UserError> promoteUserToAdmin(String token, Long userId) {
+        ErrorHandling<UserDto, UserError> response = new ErrorHandling<>();
+        if (tokenService.getRoleFromToken(token).equals(Role.ADMIN.name())) {
+            userRepository.findById(userId).ifPresentOrElse(user -> {
+                if (!user.getRole().equals(Role.ADMIN)) {
+                    userRepository.findByUsername(tokenService.getUsernameFromToken(token)).ifPresentOrElse(promoter -> {
+                        Token promoteToken = new Token(UUID.randomUUID().toString(), promoter, TokenType.PERMISSION, true);
+                        tokenRepository.save(promoteToken);
+                        emailService.sendPromoteToAdminEmailTo(promoter.getEmail(),promoteToken.getValue(),user);
+                        response.setDto(UserMapper.toDto(user));
+                    }, () -> response.setError(UserError.PROMOTER_NOT_FOUND));
+                } else {
+                    response.setError(UserError.ADMIN_ROLE_ALREADY_EXIST);
+                }
+            }, () -> response.setError(UserError.USER_NOT_FOUND_ERROR));
+        } else {
+            response.setError(UserError.AUTHORIZATION_ERROR);
         }
         return response;
     }

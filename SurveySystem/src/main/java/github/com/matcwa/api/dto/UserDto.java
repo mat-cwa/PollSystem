@@ -2,6 +2,7 @@ package github.com.matcwa.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import github.com.matcwa.model.enums.Role;
 
 import java.util.Date;
 import java.util.Objects;
@@ -10,6 +11,7 @@ import java.util.Set;
 public class UserDto {
     private Long id;
     private String username;
+    private Role role;
     private String token;
     private String email;
     private boolean isActive;
@@ -93,6 +95,13 @@ public class UserDto {
         this.dateOfRegistration = dateOfRegistration;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -8,6 +8,7 @@ import github.com.matcwa.api.error.TokenError;
 import github.com.matcwa.api.error.UserError;
 import github.com.matcwa.api.jwt.TokenService;
 import github.com.matcwa.api.mapper.UserMapper;
+import github.com.matcwa.model.enums.Role;
 import github.com.matcwa.model.enums.TokenType;
 import github.com.matcwa.model.entity.Token;
 import github.com.matcwa.model.entity.User;
@@ -255,5 +256,71 @@ class UserServiceTest {
         //then
         response.forEach(error -> assertEquals(error.getError(), UserError.EMPTY_USERNAME_AND_PASSWORD_ERROR));
         response.forEach(error -> assertNull(error.getDto()));
+    }
+    @Test
+    void shouldReturnAuthorizationErrorWhenTryPromoteUserToAdmin(){
+        //given
+        given(tokenService.getRoleFromToken("token")).willReturn(Role.USER.name());
+        //when
+        ErrorHandling<UserDto, UserError> response = userService.promoteUserToAdmin("token", 1L);
+        //then
+        assertNull(response.getDto());
+        assertEquals(response.getError(),UserError.AUTHORIZATION_ERROR);
+    }
+    @Test
+    void shouldReturnUserNotFoundErrorWhenTryPromoteUserToAdmin(){
+        //given
+        given(tokenService.getRoleFromToken("token")).willReturn(Role.ADMIN.name());
+        given(userRepository.findById(1L)).willReturn(Optional.empty());
+        //when
+        ErrorHandling<UserDto, UserError> response = userService.promoteUserToAdmin("token", 1L);
+        //then
+        assertNull(response.getDto());
+        assertEquals(response.getError(),UserError.USER_NOT_FOUND_ERROR);
+    }
+    @Test
+    void shouldReturnUserAlreadyHasAdminsRoleErrorWhenTryPromoteUserToAdmin(){
+        //given
+        User user=new User();
+        user.setRole(Role.ADMIN);
+        given(tokenService.getRoleFromToken("token")).willReturn(Role.ADMIN.name());
+        given(userRepository.findById(1L)).willReturn(Optional.of(user));
+        //when
+        ErrorHandling<UserDto, UserError> response = userService.promoteUserToAdmin("token", 1L);
+        //then
+        assertNull(response.getDto());
+        assertEquals(response.getError(),UserError.ADMIN_ROLE_ALREADY_EXIST);
+    }
+    @Test
+    void shouldReturnPromoterNotExistErrorWhenTryPromoteUserToAdmin(){
+        //given
+        User user=new User();
+        given(tokenService.getRoleFromToken("token")).willReturn(Role.ADMIN.name());
+        given(userRepository.findById(1L)).willReturn(Optional.of(user));
+        given(tokenService.getUsernameFromToken("token")).willReturn("promoter");
+        given(userRepository.findByUsername("promoter")).willReturn(Optional.empty());
+        //when
+        ErrorHandling<UserDto, UserError> response = userService.promoteUserToAdmin("token", 1L);
+        //then
+        assertNull(response.getDto());
+        assertEquals(response.getError(),UserError.PROMOTER_NOT_FOUND);
+    }
+    @Test
+    void shouldSendEmailToPromoterWhenTryPromoteUserToAdmin(){
+        //given
+        User user=new User("user","password");
+        User promoter=new User("promoter","password");
+        promoter.setEmail("promoter@email.com");
+        ArgumentCaptor<User> userCaptor=ArgumentCaptor.forClass(User.class);
+        given(tokenService.getRoleFromToken("token")).willReturn(Role.ADMIN.name());
+        given(userRepository.findById(1L)).willReturn(Optional.of(user));
+        given(tokenService.getUsernameFromToken("token")).willReturn("promoter");
+        given(userRepository.findByUsername("promoter")).willReturn(Optional.of(promoter));
+        //when
+        ErrorHandling<UserDto, UserError> response = userService.promoteUserToAdmin("token", 1L);
+        //then
+        verify(emailService,times(1)).sendPromoteToAdminEmailTo(eq("promoter@email.com"),anyString(),userCaptor.capture());
+        assertEquals(userCaptor.getValue().getUsername(),"user");
+        assertNull(response.getError());
     }
 }

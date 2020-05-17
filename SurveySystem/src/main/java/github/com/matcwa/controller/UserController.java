@@ -30,4 +30,8 @@ public class UserController {
     public ResponseEntity login(@RequestBody UserLoginDto userLoginDto){
         return ResponseResolver.resolve(userService.login(userLoginDto));
     }
+    @PostMapping("/user/{id}/promoteToAdmin")
+    public ResponseEntity promoteToAdmin(@PathVariable Long id,@RequestHeader("Authorization") String token){
+        return ResponseResolver.resolve(userService.promoteUserToAdmin(token,id));
+    }
 }

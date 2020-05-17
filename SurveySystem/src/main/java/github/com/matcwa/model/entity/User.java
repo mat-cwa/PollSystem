@@ -114,6 +114,14 @@ public class User {
         isActive = active;
     }
 
+    public Date getDateOfRegistration() {
+        return dateOfRegistration;
+    }
+
+    public void setDateOfRegistration(Date dateOfRegistration) {
+        this.dateOfRegistration = dateOfRegistration;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
